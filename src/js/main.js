@@ -9,6 +9,11 @@ import Status from './components/status.js';
 const formElement = document.querySelector('.js-form');
 const inputElement = document.querySelector('#new-item-field');
 
+const btnElement = document.querySelector('#btn');
+btn.addEventListener('click', function (e) {
+  console.log("Button Clicked");
+})
+
 // Add a submit event listener to the form and prevent it from posting back
 formElement.addEventListener('submit', evt => {
     evt.preventDefault();

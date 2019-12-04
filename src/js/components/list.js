@@ -27,15 +27,17 @@ export default class List extends Component {
         
         // Loop the items and generate a list of elements
         self.element.innerHTML = `
-            <ul class="app__items">
+            <div class="app__items">
                 ${store.state.items.map(item => {
                     return `
-                        <li>${item}<button aria-label="Delete this item">×</button></li>
+						<div class="node-card">
+
+						</div>
                     `
                 }).join('')}
-            </ul>
+            </div>
         `;
-        
+
         // Find all the buttons in the list and when they are clicked, we dispatch a 
         // `clearItem` action which we pass the current item's index to
         self.element.querySelectorAll('button').forEach((button, index) => {

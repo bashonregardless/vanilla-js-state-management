@@ -15,8 +15,8 @@ export default class Count extends Component {
      * @returns {void}
      */
     render() {
-        let suffix = store.state.items.length !== 1 ? 's' : '';
-        let emoji = store.state.items.length > 0 ? '🙌' : '😢';
+	  //let suffix = store.state.items.length !== 1 ? 's' : '';
+	  //let emoji = store.state.items.length > 0 ? '🙌' : '😢';
 
         this.element.innerHTML = `
             <small>You've done</small>

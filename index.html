@@ -1,51 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="css/global.css" />
-    <link rel="stylesheet" media="all" href="https://rawgit.com/hankchizljaw/boilerform/master/dist/css/boilerform.min.css?v=1.1.1" />
-    <title>Vanilla State Management</title>
-</head>
-<body>
-    <main>
-        <section class="app">
-            <section class="app__input">
-			  <svg viewBox="0 0 220 100" xmlns="http://www.w3.org/2000/svg">
-				<!-- Simple rectangle -->
-				<foreignObject x="20" y="20" width="160" height="160">
-				<!--
-	  In the context of SVG embedded in an HTML document, the XHTML 
-	  namespace could be omitted, but it is mandatory in the 
-	  context of an SVG document
-				-->
-				<div xmlns="http://www.w3.org/1999/xhtml">
-				  <button id="btn">Button</button>
-				</div>
-				</foreignObject>
-			  </svg>
-			  <h2 class="app__heading">What you've done</h2>
-			  <div class="js-items" aria-live="polite" aria-label="A list of items you have done"></div>
-			  <form class="[ new-item ] [ boilerform ] [ js-form ]">
-				<div class="boilerform">
-				  <!-- Form styles from the https://boilerform.design boilerplate -->
-				  <label for="new-item-field" class="[ new-item__label ] [ c-label ]">Add a new item</label>
-				  <input type="text" class="[ new-item__details ] [ c-input-field ]" id="new-item-field" autocomplete="off" />
-				  <button class="[ c-button ] [ new-item__button ]">Save</button>
-				</div>
-			  </form>
-			</section>
-			<aside class="app__status">
-			  <p role="status" class="visually-hidden">You have done <span class="js-status">1 thing</span> today!</p>
-			  <div class="[ app__decor ] [ js-count ]" aria-hidden="true">
-				<small>You've done</small>
-				<span>0</span>
-				<small>things today 😢</small>
-			  </div>
-			</aside>
-		</section>
-	</main>
+  <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<link rel="stylesheet" href="css/global.css" />
+	<title>Flowchart</title>
+  </head>
+  <body>
+	<div class="js-status"></div>
 	<script type="module" src="dist/app.js"></script>
-</body>
+  </body>
 </html>

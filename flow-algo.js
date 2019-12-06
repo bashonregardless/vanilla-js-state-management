@@ -4,7 +4,7 @@ var GRAPH_EXPLORER = {};
 
 GRAPH_EXPLORER.setup = function setup () {
   this.exploredNodes = {};
-  this.processingNodesQueue = [];
+  this.processingNodes = {};
   this.queue = [];
 
   this.generatePositions();
@@ -50,8 +50,8 @@ GRAPH_EXPLORER.getXCellVal = function getXCellVal (idx, xCell, outdegree) {
   }
 }
 
-GRAPH_EXPLORER.updateExploredNodes = function updateExploredNodes (processingNode, depth) {
-  const { outdegree, connectedNodes } = state.adjL.nodes[processingNode.nodeName];
+GRAPH_EXPLORER.updateExploredNodes = function updateExploredNodes (/* processingNode, depth */qNodeName) {
+  const { outdegree, connectedNodes } = /* state.adjL.nodes[processingNode.nodeName] */state.adjL.nodes[qNodeName];
   /* TO-DO: handle termination condition when outgoing edge is incident on a node at lower depth 
    * than the depth of the node being processed */
   if (outdegree === 0) {
@@ -61,42 +61,59 @@ GRAPH_EXPLORER.updateExploredNodes = function updateExploredNodes (processingNod
   connectedNodes.forEach( function (nodeName, idx) {
 	/* if node hasn't been processed yet, push it to processing queue */
 	if (!Object.prototype.hasOwnProperty.call(this.exploredNodes, nodeName) && !this.queue.includes(nodeName)) {
-	  const xCell = this.getXCellVal(idx, processingNode.xCell, outdegree);
+	  const xCell = this.getXCellVal(idx, /* processingNode.xCell */this.processingNodes[qNodeName].xCell, outdegree);
 
-	  this.processingNodesQueue.push({
-		nodeName: nodeName, 
-		depth: processingNode.depth + 1,
-		xCell,
-	  });
+	  //this.processingNodes.push({
+	  //  nodeName: nodeName, 
+	  //  depth: /* processingNode.depth */this.processingNode[nodeName].depth + 1,
+	  //  xCell,
+	  //});
+
+	  this.processingNodes[nodeName] = {
+	    nodeName: nodeName, 
+	    depth: /* processingNode.depth */this.processingNodes[qNodeName].depth + 1,
+	    xCell,
+	  };
 	  this.queue.push(nodeName);
 	} else {
-	  this.exploredNodes[nodeName].depth = processingNode.depth + 1;
-	  this.updateExploredNodes({ 
-		nodeName,
-		xCell: processingNode.xCell,
-		depth: this.exploredNodes[nodeName].depth
-	  });
+	  if (Object.prototype.hasOwnProperty.call(this.processingNodes, qNodeName) && Object.prototype.hasOwnProperty.call(this.exploredNodes, nodeName)) {
+		this.exploredNodes[nodeName].depth = /* processingNode.depth */this.processingNodes[qNodeName].depth + 1;
+	  } else {
+		this.processingNodes[nodeName].depth = this.exploredNodes[qNodeName].depth + 1;
+	  }
+	  //this.updateExploredNodes({ 
+	  //  nodeName,
+	  //  xCell: /* processingNode.xCell */this.processingNodes[qNodeName].xCell,
+	  //  depth: this.exploredNodes[nodeName].depth
+	  //});
+	  this.updateExploredNodes(nodeName);
 	}
   }.bind(this))
 }
 
 GRAPH_EXPLORER.generatePositions = function generatePositions () {
   if (state.adjL.root) {
-	this.processingNodesQueue.push({ 
+	this.processingNodes[state.adjL.root] = {
 	  nodeName: state.adjL.root,
 	  depth: 1,
-	  xCell: 0
-	});
+	  xCell: 0,
+	}
+	//this.processingNodes.push({ 
+	//  nodeName: state.adjL.root,
+	//  depth: 1,
+	//  xCell: 0
+	//});
 	this.queue.push(state.adjL.root);
   }
 
-  while (this.processingNodesQueue.length) {
-	const processingNode = this.processingNodesQueue.shift();
+  while (/* this.processingNodes.length */this.queue.length) {
+	//const processingNode = this.processingNodesQueue.shift();
 	const qNodeName = this.queue.shift();
 
-	this.updateExploredNodes(processingNode);
+	this.updateExploredNodes(/* processingNode */qNodeName);
 	/* once node has been explored, add it to exploredQueue */
-	this.exploredNodes[processingNode.nodeName] = new this.newProcessedNode(processingNode.depth, processingNode.xCell);
+	this.exploredNodes[/* processingNode.nodeName */qNodeName] = new this.newProcessedNode(/* processingNode.depth, processingNode.xCell */this.processingNodes[qNodeName].depth, this.processingNodes[qNodeName].xCell);
+	delete this.processingNodes[qNodeName];
   }
 }
 

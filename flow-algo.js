@@ -1,3 +1,17 @@
+/* Basic assumptions:
+ *
+ * In calculation of depth,
+ * If a node that does not exist in exploredNodes list is explored from a node then
+ * assign it a depth one greater than the depth of the node that it is being explored from.
+ */
+
+/*  Outdegree can either be a forward edge or a back edge
+  * A forward edge cannot have length greater than one.
+  *
+  * A back edge can have length greater than one.
+  * 
+  */
+
 const state = require('./src/js/store/state.js');
 
 var GRAPH_EXPLORER = {};
@@ -12,9 +26,10 @@ GRAPH_EXPLORER.setup = function setup () {
   console.log(this.exploredNodes);
 }
 
-GRAPH_EXPLORER.newProcessedNode = function newProcessedNode (depth, xCell) {
+GRAPH_EXPLORER.newProcessedNode = function newProcessedNode (depth, xCell, outdegree) {
   this.depth = depth;
   this.xCell = xCell;
+  this.outdegree = outdegree;
 }
 
 /* xCell calculation assumption: 
@@ -68,6 +83,7 @@ GRAPH_EXPLORER.updateExploredNodes = function updateExploredNodes (processingNod
 		nodeName: nodeName, 
 		depth: processingNode.depth + 1,
 		xCell,
+		outdegree,
 	  });
 	  this.queue.push(nodeName);
 	} 
@@ -79,7 +95,8 @@ GRAPH_EXPLORER.generatePositions = function generatePositions () {
 	this.processingNodesQueue.push({ 
 	  nodeName: state.adjL.root,
 	  depth: 1,
-	  xCell: 0
+	  xCell: 0,
+	  outdegree: state.adjL.nodes[state.adjL.root].outdegree,
 	});
 	this.queue.push(state.adjL.root);
   }
@@ -90,7 +107,7 @@ GRAPH_EXPLORER.generatePositions = function generatePositions () {
 
 	this.updateExploredNodes(processingNode);
 	/* once node has been explored, add it to exploredQueue */
-	this.exploredNodes[processingNode.nodeName] = new this.newProcessedNode(processingNode.depth, processingNode.xCell);
+	this.exploredNodes[processingNode.nodeName] = new this.newProcessedNode(processingNode.depth, processingNode.xCell, processingNode.outdegree);
   }
 }
 

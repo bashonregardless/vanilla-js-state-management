@@ -83,7 +83,7 @@ GRAPH_EXPLORER.updateExploredNodes = function updateExploredNodes (processingNod
 		nodeName: nodeName, 
 		depth: processingNode.depth + 1,
 		xCell,
-		outdegree,
+		outdegree: state.adjL.nodes[nodeName].outdegree,
 	  });
 	  this.queue.push(nodeName);
 	} 
@@ -98,12 +98,10 @@ GRAPH_EXPLORER.generatePositions = function generatePositions () {
 	  xCell: 0,
 	  outdegree: state.adjL.nodes[state.adjL.root].outdegree,
 	});
-	this.queue.push(state.adjL.root);
   }
 
   while (this.processingNodesQueue.length) {
 	const processingNode = this.processingNodesQueue.shift();
-	const qNodeName = this.queue.shift();
 
 	this.updateExploredNodes(processingNode);
 	/* once node has been explored, add it to exploredQueue */

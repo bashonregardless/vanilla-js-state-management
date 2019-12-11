@@ -6,6 +6,9 @@
  */
 
 /*  Outdegree can either be a forward edge or a back edge
+ *  
+ *  length definition: number of nodes counting from current node (not including current node).
+ *
   * A forward edge cannot have length greater than one.
   *
   * A back edge can have length greater than one.
@@ -19,17 +22,19 @@ var GRAPH_EXPLORER = {};
 GRAPH_EXPLORER.setup = function setup () {
   this.exploredNodes = {};
   this.processingNodesQueue = [];
-  this.queue = [];
 
   this.generatePositions();
 
   console.log(this.exploredNodes);
 }
 
-GRAPH_EXPLORER.newProcessedNode = function newProcessedNode (depth, xCell, outdegree) {
+GRAPH_EXPLORER.newProcessedNode = function newProcessedNode (depth, xCell, outdegree, forwardEdge, backEdge, parent) {
   this.depth = depth;
   this.xCell = xCell;
   this.outdegree = outdegree;
+  this.forwardEdge = forwardEdge;
+  this.backEdge = backEdge;
+  this.parent = parent;
 }
 
 /* xCell calculation assumption: 
@@ -84,9 +89,17 @@ GRAPH_EXPLORER.updateExploredNodes = function updateExploredNodes (processingNod
 		depth: processingNode.depth + 1,
 		xCell,
 		outdegree: state.adjL.nodes[nodeName].outdegree,
+		forwardEdge: [],
+		backEdge: [],
+		parent: processingNode.nodeName,
 	  });
-	  this.queue.push(nodeName);
+	  // add discovered forward edge
+	  processingNode.forwardEdge.push(nodeName);
 	} 
+	// else a back edge is discovered
+	else {
+	  processingNode.backEdge.push(nodeName);
+	}
   }.bind(this))
 }
 
@@ -97,6 +110,9 @@ GRAPH_EXPLORER.generatePositions = function generatePositions () {
 	  depth: 1,
 	  xCell: 0,
 	  outdegree: state.adjL.nodes[state.adjL.root].outdegree,
+	  forwardEdge: [],
+	  backEdge: [],
+	  parent: null,
 	});
   }
 
@@ -105,7 +121,14 @@ GRAPH_EXPLORER.generatePositions = function generatePositions () {
 
 	this.updateExploredNodes(processingNode);
 	/* once node has been explored, add it to exploredQueue */
-	this.exploredNodes[processingNode.nodeName] = new this.newProcessedNode(processingNode.depth, processingNode.xCell, processingNode.outdegree);
+	this.exploredNodes[processingNode.nodeName] = new this.newProcessedNode(
+	  processingNode.depth, 
+	  processingNode.xCell,
+	  processingNode.outdegree,
+	  processingNode.forwardEdge,
+	  processingNode.backEdge,
+	  processingNode.parent,
+	);
   }
 }
 

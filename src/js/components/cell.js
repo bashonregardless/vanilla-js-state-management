@@ -17,57 +17,36 @@ export default class Status extends Component {
   render() {
 	let self = this;
 
+	function calSVGWidth () {
+	  const { minXCell: min, maxXCell: max } = store.state;
+	  return 200 + ( (Math.abs(min) + Math.abs(max) + 1) * 60) + ( (Math.abs(min) + Math.abs(max) + 1) * 300)
+	}
+
+	function calSVGHeight (depth) {
+	  return 200 + store.state.maxDepth * 240;
+	}
+
 	function calcX (xCell) {
 	  if (xCell === 0) {
-		return 1000;
+		return (calSVGWidth() / 2 );
 	  }
 	  if (xCell < 0) {
-		return 1000 - (Math.abs(xCell) * 300) - 60;
+		return (calSVGWidth() / 2 ) - (Math.abs(xCell) * 300) - 60;
 	  }
 	  if (xCell > 0) {
-		return 1000 + (xCell * 300) + 60;
+		return (calSVGWidth() / 2 ) + (xCell * 300) + 60;
 	  }
-	}
-
-	function getX1 (xCell) {
-	  if (xCell === 0)
-		return 1000 + (xCell * 300) + (300 / 2);
-
-	  if (xCell < 0)
-		return 1000 - (Math.abs(xCell) * 300) + (300 / 2) - (Math.abs(xCell) * 60); 
-
-	  if (xCell > 0)
-		return 1000 + (xCell * 300) + (300 / 2) + (xCell * 60);
-	}
-
-	function getX2 (xcell) {
-	  if (xcell === 0)
-		return 1000 + (xcell * 300) + (300 / 2);
-
-	  if (xcell < 0)
-		return 1000 - (Math.abs(xcell) * 300) + (300 / 2) - (Math.abs(xcell) * 60); 
-
-	  if (xcell > 0)
-		return 1000 + (xcell * 300) + (300 / 2) + (xcell * 60);
-	}
-
-	function getY1 (depth) {
-	  return ((depth) * 240) - 60
-	}
-
-	function getY2 (depth) {
-	  return ((depth) * 240)
 	}
 
 	function getXForwardEdgePathM (xCell, outdegree, edgeNumber) {
 	  if (xCell === 0)
-		return 1000 + (Math.abs(xCell) * 300) + (300 * ( (edgeNumber + 1) / (outdegree + 1) ))
+		return (calSVGWidth() / 2 ) + (Math.abs(xCell) * 300) + (300 * ( (edgeNumber + 1) / (outdegree + 1) ))
 
 	  if (xCell < 0)
-		return 1000 - (Math.abs(xCell) * 300) + (300 * ( (edgeNumber + 1) / (outdegree + 1) )) - (Math.abs(xCell) * 60)
+		return (calSVGWidth() / 2 ) - (Math.abs(xCell) * 300) + (300 * ( (edgeNumber + 1) / (outdegree + 1) )) - (Math.abs(xCell) * 60)
 
 	  if (xCell > 0)
-		return 1000 + (Math.abs(xCell) * 300) + (300 * ( (edgeNumber + 1) / (outdegree + 1) )) + (Math.abs(xCell) * 60)
+		return (calSVGWidth() / 2 ) + (Math.abs(xCell) * 300) + (300 * ( (edgeNumber + 1) / (outdegree + 1) )) + (Math.abs(xCell) * 60)
 	}
 
 	function getYForwardEdgePathM (depth, outdegree, edgeNumber) {
@@ -103,21 +82,6 @@ export default class Status extends Component {
 	  }
 	}
 
-	//	function getPath ({ id, depth, xCell, outdegree }) {
-	//	  return [...Array(outdegree).keys()].map( function (edgeNumber) {
-	//		  return `
-	//		   <path stroke="black"
-	//			 d="M ${getXPathM(xCell, outdegree, edgeNumber)},${getYPathM(depth, outdegree, edgeNumber)}
-	//			 v ${getPathv(outdegree)}
-	//			 m 0,0
-	//			 h ${outdegree > 1 ? getPathh(edgeNumber, outdegree, xCell) : 0}
-	//			 m 0,0
-	//			 v ${getPathv(outdegree)}"
-	//		   />
-	//		   `;
-	//	  }).join('')
-	//	}
-
 	function getForwardEdgePath ({ depth, xCell, outdegree, forwardEdge, backEdge }) {
 	  return [...Array(forwardEdge.length).keys()].map( function (edgeNumber) {
 		  return `
@@ -134,28 +98,27 @@ export default class Status extends Component {
 	}
 
 	function getXBackEdgePathM (connectedNode, parent, xCell) {
-	  if (store.state[parent].xCell > xCell) {
+	  if (store.state.nodes[parent].xCell > xCell) {
 		if (xCell < 0)
-		  return 1000 - (Math.abs(xCell) * 300) + (300 * (1 / 4)) - (Math.abs(xCell) * 60)
+		  return (calSVGWidth() / 2 ) - (Math.abs(xCell) * 300) + (300 * (1 / 4)) - (Math.abs(xCell) * 60)
 	  } 
 	  else {
 		if (xCell > 0)
-		  return 1000 + (Math.abs(xCell) * 300) + (Math.abs(xCell) * 60) + (300 * (3 / 4));
+		  return (calSVGWidth() / 2 ) + (Math.abs(xCell) * 300) + (Math.abs(xCell) * 60) + (300 * (3 / 4));
 	  }
 	}
 
 	function getYBackEdgePathM (connectedNode, depth) {
-	  //const { depth } = store.state[connectedNode];
 	  return (depth * 240) - 60 - 180
 	}
 
 	function getBackEdgePathv (connectedNode) {
-	  const { depth } = store.state[connectedNode];
+	  const { depth } = store.state.nodes[connectedNode];
 	  return (depth * 240) - 90;
 	}
 
 	function getBackEdgePathh (connectedNode, xCell) {
-	  const { xCell: connectedNodeXCell } = store.state[connectedNode];
+	  const { xCell: connectedNodeXCell } = store.state.nodes[connectedNode];
 	  if (connectedNodeXCell === 0) {
 		return (300 * (3 / 4)) + ( (Math.abs(xCell) - Math.abs(connectedNodeXCell) ) * 60);
 	  }
@@ -163,47 +126,35 @@ export default class Status extends Component {
 
 	function getBackEdgePath ({ depth, xCell, outdegree, forwardEdge, backEdge, parent }) {
 	  return backEdge.map( function (connectedNode) {
+		const { id = '', icon = '', label = '' } = connectedNode;
 		return `
 		  <path stroke="black"
-			d="M ${getXBackEdgePathM(connectedNode, parent, xCell)},${getYBackEdgePathM(connectedNode, depth)}
-			v -${getBackEdgePathv(connectedNode)}
+			d="M ${getXBackEdgePathM(id, parent, xCell)},${getYBackEdgePathM(id, depth)}
+			v -${getBackEdgePathv(id)}
 			m 0,0
-			h ${getBackEdgePathh(connectedNode, xCell)}"
+			h ${getBackEdgePathh(id, xCell)}"
 		  />
 		`;
 	  }).join('');
 	}
 
 	self.element.innerHTML = `
-	<svg viewBox="0 0 2000 2000" width="2000" height="2000">
-	  ${Object.keys(store.state).map( item => {
-		const { depth, xCell, outdegree, forwardEdge, backEdge, parent } = store.state[item];
+	<svg viewBox="0 0 ${calSVGWidth()} ${calSVGHeight()}"
+	  width="${calSVGWidth()}"
+	  height="${calSVGHeight()}"
+	>
+	  ${Object.keys(store.state.nodes).map( item => {
+		const { depth, xCell, outdegree, forwardEdge, backEdge, parent } = store.state.nodes[item];
 		return `
 		<g id="${item}">
 		  <foreignObject x="${calcX(xCell)}" y="${((depth - 1) * 240)}" width="300" height="180">
 		    <div class="cell">${item}</div>
 		  </foreignObject>
-		  ${getForwardEdgePath(store.state[item])}
-		  ${getBackEdgePath(store.state[item])}
+		  ${getForwardEdgePath(store.state.nodes[item])}
+		  ${getBackEdgePath(store.state.nodes[item])}
 		</g>
 		`
 	  }).join('')}
 	</svg>`;
   }
 }
-
-//${store.state.nodes.map(item => {
-//  const { id, depth, xCell, outdegree } = item;
-//  return `
-//		  <g id="${id}">
-//			<foreignObject x="${calcX(xCell)}" y="${((depth - 1) * 240)}" width="300" height="180">
-//			  <div class="cell">text</div>
-//			</foreignObject>
-//			${getPath(item)}
-//		  </g>
-//		  `
-//}).join('')}
-
-//${ outdegree === 1 && `
-//			  <line x1="${getX1(xCell)}" y1="${getY1(depth)}" x2="${getX2(xCell)}" y2="${getY2(depth)}" stroke="black" />
-//			` }

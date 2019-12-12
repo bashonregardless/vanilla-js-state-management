@@ -1,0 +1,90 @@
+{
+  "nodes": {
+    "triggerOne": {
+      "depth": 1,
+      "xCell": 0,
+      "outdegree": 1,
+      "forwardEdge": [
+        {
+          "id": "actionOne",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": null
+    },
+    "actionOne": {
+      "depth": 2,
+      "xCell": 0,
+      "outdegree": 1,
+      "forwardEdge": [
+        {
+          "id": "ifThenOne",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "triggerOne"
+    },
+    "ifThenOne": {
+      "depth": 3,
+      "xCell": 0,
+      "outdegree": 2,
+      "forwardEdge": [
+        {
+          "id": "filterOne",
+          "icon": "",
+          "label": "Not Responded"
+        },
+        {
+          "id": "actionTwo",
+          "icon": "",
+          "label": "Responded"
+        }
+      ],
+      "backEdge": [],
+      "parent": "actionOne"
+    },
+    "filterOne": {
+      "depth": 4,
+      "xCell": -1,
+      "outdegree": 1,
+      "forwardEdge": [
+        {
+          "id": "actionThree",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [
+        {
+          "id": "actionOne",
+          "icon": "wait",
+          "label": ""
+        }
+      ],
+      "parent": "ifThenOne"
+    },
+    "actionTwo": {
+      "depth": 4,
+      "xCell": 1,
+      "outdegree": 0,
+      "forwardEdge": [],
+      "backEdge": [],
+      "parent": "ifThenOne"
+    },
+    "actionThree": {
+      "depth": 5,
+      "xCell": -1,
+      "outdegree": 0,
+      "forwardEdge": [],
+      "backEdge": [],
+      "parent": "filterOne"
+    }
+  },
+  "minXCell": -1,
+  "maxXCell": 1,
+  "maxDepth": 5
+}

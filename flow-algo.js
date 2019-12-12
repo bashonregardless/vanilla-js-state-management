@@ -12,7 +12,8 @@
   * A forward edge cannot have length greater than one.
   *
   * A back edge can have length greater than one.
-  * 
+  * A back edge cannot cross over from an ancestor to a child, i.e
+  * a back edge can only be incident on an ancestor.
   */
 
 const state = require('./src/js/store/state.js');
@@ -23,9 +24,19 @@ GRAPH_EXPLORER.setup = function setup () {
   this.exploredNodes = {};
   this.processingNodesQueue = [];
 
+  this.minXCell = 0;
+  this.maxXCell = 0;
+
+  this.maxDepth = 0;
+
   this.generatePositions();
 
-  console.log(this.exploredNodes);
+  console.log(JSON.stringify({
+	nodes: this.exploredNodes,
+	minXCell: this.minXCell,
+	maxXCell: this.maxXCell,
+	maxDepth: this.maxDepth
+  }));
 }
 
 GRAPH_EXPLORER.newProcessedNode = function newProcessedNode (depth, xCell, outdegree, forwardEdge, backEdge, parent) {
@@ -70,19 +81,21 @@ GRAPH_EXPLORER.getXCellVal = function getXCellVal (idx, xCell, outdegree) {
   }
 }
 
-GRAPH_EXPLORER.updateExploredNodes = function updateExploredNodes (processingNode, depth) {
+GRAPH_EXPLORER.updateExploredNodes = function updateExploredNodes (processingNode) {
   const { outdegree, connectedNodes } = state.adjL.nodes[processingNode.nodeName];
-  /* TO-DO: handle termination condition when outgoing edge is incident on a node at lower depth 
-   * than the depth of the node being processed */
   if (outdegree === 0) {
 	return;
   }
 
   connectedNodes.forEach( function (connectedNode, idx) {
-	const { id: nodeName } = connectedNode;
+	const { id: nodeName, icon = '', label = '' } = connectedNode;
 	/* if node hasn't been processed yet, push it to processing queue */
 	if (!Object.prototype.hasOwnProperty.call(this.exploredNodes, nodeName)) {
 	  const xCell = this.getXCellVal(idx, processingNode.xCell, outdegree);
+
+	  /* update xCell min and max */
+	  if (xCell < this.minXCell) this.minXCell = xCell;
+	  if (xCell > this.maxXCell) this.maxXCell = xCell;
 
 	  this.processingNodesQueue.push({
 		nodeName: nodeName, 
@@ -94,11 +107,14 @@ GRAPH_EXPLORER.updateExploredNodes = function updateExploredNodes (processingNod
 		parent: processingNode.nodeName,
 	  });
 	  // add discovered forward edge
-	  processingNode.forwardEdge.push(nodeName);
+	  processingNode.forwardEdge.push( {id: nodeName, icon, label } );
+
+	  /* update max depth */
+	  if (processingNode.depth + 1 > this.maxDepth) this.maxDepth = processingNode.depth + 1;
 	} 
 	// else a back edge is discovered
 	else {
-	  processingNode.backEdge.push(nodeName);
+	  processingNode.backEdge.push( { id: nodeName, icon, label });
 	}
   }.bind(this))
 }

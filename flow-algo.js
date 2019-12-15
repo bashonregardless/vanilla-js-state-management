@@ -1,3 +1,5 @@
+'use strict'
+
 /* Basic assumptions:
  *
  * In calculation of depth,
@@ -5,16 +7,14 @@
  * assign it a depth one greater than the depth of the node that it is being explored from.
  */
 
-/*  Outdegree can either be a forward edge or a back edge
- *  
- *  length definition: number of nodes counting from current node (not including current node).
+/* Edge Classification :-
  *
-  * A forward edge cannot have length greater than one.
-  *
-  * A back edge can have length greater than one.
-  * A back edge cannot cross over from an ancestor to a child, i.e
-  * a back edge can only be incident on an ancestor.
-  */
+ * Tree Edge: Visit new vertex via edge.
+ *
+ * Forward Edge: Node -> Decendant
+ *
+ * Back Edge: Node -> Ancestor
+ */
 
 const state = require('./src/js/store/state.js');
 
@@ -39,10 +39,12 @@ GRAPH_EXPLORER.setup = function setup () {
   }));
 }
 
-GRAPH_EXPLORER.newProcessedNode = function newProcessedNode (depth, xCell, outdegree, forwardEdge, backEdge, parent) {
+GRAPH_EXPLORER.newProcessedNode = function newProcessedNode (
+  depth, xCell, forwardEdge, backEdge, parent
+) {
   this.depth = depth;
   this.xCell = xCell;
-  this.outdegree = outdegree;
+  //this.outdegree = outdegree;
   this.forwardEdge = forwardEdge;
   this.backEdge = backEdge;
   this.parent = parent;
@@ -62,27 +64,33 @@ GRAPH_EXPLORER.newProcessedNode = function newProcessedNode (depth, xCell, outde
 GRAPH_EXPLORER.getXCellVal = function getXCellVal (idx, xCell, outdegree) {
   /* outdegree is odd */
   if (outdegree & 1) {
-	if ((idx + 1) === Math.floor(outdegree / 2) + 1) {
-	  return xCell;
-	} else if ((idx + 1) < Math.floor(outdegree / 2) + 1) {
-	  return xCell - (idx + 1)
-	} else {
-	  return xCell + ( (idx + 1) - ( Math.floor(outdegree / 2) + 1) )
-	}
-  } 
+    if (idx + 1 === Math.floor(outdegree / 2) + 1) {
+      return xCell;
+    } else if (idx + 1 < Math.floor(outdegree / 2) + 1) {
+      return xCell - (idx + 1)
+    } else {
+      return xCell + (idx + 1 - (Math.floor(outdegree / 2) + 1))
+    }
+  }
 
   /* outdegree is even */
   else {
-	if (idx < outdegree / 2) {
-	  return xCell - (idx + 1);
-	} else {
-	  return xCell + ( (idx + 1) - (outdegree / 2) );
-	}
+    if (idx < outdegree / 2) {
+      return xCell - (idx + 1);
+    } else {
+      return xCell + (idx + 1 - outdegree / 2);
+    }
   }
 }
 
 GRAPH_EXPLORER.updateExploredNodes = function updateExploredNodes (processingNode) {
-  const { outdegree, connectedNodes } = state.adjL.nodes[processingNode.nodeName];
+  const { connectedNodes } = state.adjL.nodes[processingNode.nodeName];
+  const { length: outdegree } = connectedNodes;
+
+  const totalTreeEdge = connectedNodes.filter(function countTreeEdge (node) {
+    return !Object.prototype.hasOwnProperty.call(this.exploredNodes, node.id);
+  }.bind(this)).length;
+
   if (outdegree === 0) {
 	return;
   }
@@ -125,7 +133,7 @@ GRAPH_EXPLORER.generatePositions = function generatePositions () {
 	  nodeName: state.adjL.root,
 	  depth: 1,
 	  xCell: 0,
-	  outdegree: state.adjL.nodes[state.adjL.root].outdegree,
+	  //outdegree: state.adjL.nodes[state.adjL.root].outdegree,
 	  forwardEdge: [],
 	  backEdge: [],
 	  parent: null,

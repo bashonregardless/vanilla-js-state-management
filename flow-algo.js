@@ -87,10 +87,14 @@ GRAPH_EXPLORER.setup = function setup () {
   // build sparse table
   this.buildSparseTable(this.depthArray.length);
 
-  console.log(`LCA(actionThree, actionTwo) is ${this.findLCA('actionThree', 'actionTwo')}`);
-  console.log(`LCA(filterOne, actionTwo) is ${this.findLCA('filterOne', 'actionTwo')}`);
-  console.log(`LCA(filterOne, actionThree) is ${this.findLCA('filterOne', 'actionThree')}`);
-  console.log(`LCA(ifThenOne, actionThree) is ${this.findLCA('ifThenOne', 'actionThree')}`);
+  // console.log(`LCA(actionThree, actionTwo) is ${this.findLCA('actionThree', 'actionTwo')}`);
+  // console.log(`LCA(filterOne, actionTwo) is ${this.findLCA('filterOne', 'actionTwo')}`);
+  // console.log(`LCA(filterOne, actionThree) is ${this.findLCA('filterOne', 'actionThree')}`);
+  // console.log(`LCA(ifThenOne, actionThree) is ${this.findLCA('ifThenOne', 'actionThree')}`);
+  console.log(`LCA(D, E) is ${this.findLCA('D', 'E')}`);
+  console.log(`LCA(F, E) is ${this.findLCA('F', 'E')}`);
+  console.log(`LCA(K, E) is ${this.findLCA('K', 'E')}`);
+  console.log(`LCA(J, H) is ${this.findLCA('J', 'H')}`);
 
   console.log(JSON.stringify({
 	nodes: this.exploredNodes,

@@ -93,67 +93,188 @@
 //}
 
 
+//module.exports = {
+//  adjL: {
+//	root: 'triggerOne',
+//	nodes: {
+//	  triggerOne: {
+//		id: 'triggerOne',
+//		type: 'trigger',
+//		text: 'Patient with no visit in last 12 months & no visit scheduled in next 2 months',
+//		outdegree: 1,
+//		indegree: 0,
+//		connectedNodes: [
+//		  { id: 'actionOne', icon: '' }
+//		]
+//	  },
+//	  actionOne: {
+//		id: 'actionOne',
+//		type: 'action',
+//		text: 'Text Confirmation and Appointment',
+//		outdegree: 1,
+//		indegree: 2,
+//		connectedNodes: [
+//		  { id: 'ifThenOne', icon: '' }
+//		]
+//	  },
+//	  actionTwo: {
+//		id: 'actionTwo',
+//		type: 'action',
+//		text: 'Automated Call Confirmation before 3 days',
+//		outdegree: 0,
+//		indegree: 1,
+//		connectedNodes: []
+//	  },
+//	  actionThree: {
+//		id: 'actionThree',
+//		type: 'action',
+//		text: 'Email Confirmation before 1 day',
+//		outdegree: 0,
+//		indegree: 1,
+//		connectedNodes: []
+//	  },
+//	  ifThenOne: {
+//		id: 'ifThenOne',
+//		type: 'ifThen',
+//		text: 'Patient visits after receiving Text Message',
+//		outdegree: 2,
+//		indegree: 1,
+//		connectedNodes: [
+//		  { id: 'filterOne', icon: '', label: 'Not Responded' },
+//		  { id: 'actionTwo', icon: '', label: 'Responded' }
+//		]
+//	  },
+//	  filterOne: {
+//		id: 'filterOne',
+//		type: 'filter',
+//		text: 'Call from Care Coordinator',
+//		outdegree: 1,
+//		indegree: 1,
+//		connectedNodes: [
+//		  { id: 'actionThree', icon: '' },
+//		  { id: 'actionOne', icon: 'wait'}
+//		]
+//	  },
+//	}
+//  }
+//}
+
 module.exports = {
   adjL: {
-	root: 'triggerOne',
+	root: 'A',
 	nodes: {
-	  triggerOne: {
-		id: 'triggerOne',
+	  A: {
+		id: 'A',
 		type: 'trigger',
 		text: 'Patient with no visit in last 12 months & no visit scheduled in next 2 months',
-		outdegree: 1,
-		indegree: 0,
 		connectedNodes: [
-		  { id: 'actionOne', icon: '' }
+		  { id: 'B', icon: '' },
+		  { id: 'C', icon: '' }
 		]
 	  },
-	  actionOne: {
-		id: 'actionOne',
+	  B: {
+		id: 'B',
 		type: 'action',
 		text: 'Text Confirmation and Appointment',
-		outdegree: 1,
-		indegree: 2,
 		connectedNodes: [
-		  { id: 'ifThenOne', icon: '' }
+		  { id: 'D', icon: '' },
+		  { id: 'E', icon: '' }
 		]
 	  },
-	  actionTwo: {
-		id: 'actionTwo',
+	  C: {
+		id: 'C',
 		type: 'action',
 		text: 'Automated Call Confirmation before 3 days',
 		outdegree: 0,
 		indegree: 1,
-		connectedNodes: []
+		connectedNodes: [
+		  { id: 'F', icon: '' },
+		  { id: 'G', icon: '' },
+		  { id: 'H', icon: '' }
+		]
 	  },
-	  actionThree: {
-		id: 'actionThree',
+	  D: {
+		id: 'D',
 		type: 'action',
 		text: 'Email Confirmation before 1 day',
-		outdegree: 0,
-		indegree: 1,
 		connectedNodes: []
 	  },
-	  ifThenOne: {
-		id: 'ifThenOne',
+	  E: {
+		id: 'E',
 		type: 'ifThen',
 		text: 'Patient visits after receiving Text Message',
-		outdegree: 2,
-		indegree: 1,
 		connectedNodes: [
-		  { id: 'filterOne', icon: '', label: 'Not Responded' },
-		  { id: 'actionTwo', icon: '', label: 'Responded' }
+		  { id: 'K', icon: '', label: 'Not Responded' },
 		]
 	  },
-	  filterOne: {
-		id: 'filterOne',
+	  F: {
+		id: 'F',
 		type: 'filter',
 		text: 'Call from Care Coordinator',
-		outdegree: 1,
-		indegree: 1,
 		connectedNodes: [
-		  { id: 'actionThree', icon: '' },
-		  { id: 'actionOne', icon: 'wait'}
+		  { id: 'I', icon: '' },
 		]
+	  },
+	  G: {
+		id: 'G',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: [
+		  { id: 'J', icon: '' },
+		  { id: 'L', icon: '' },
+		  { id: 'N', icon: '' },
+		]
+	  },
+	  H: {
+		id: 'H',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: [
+		  { id: 'M', icon: '' },
+		  { id: 'O', icon: '' },
+		]
+	  },
+	  K: {
+		id: 'K',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  I: {
+		id: 'I',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  J: {
+		id: 'J',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  L: {
+		id: 'L',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  M: {
+		id: 'M',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  N: {
+		id: 'N',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  O: {
+		id: 'O',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
 	  },
 	}
   }

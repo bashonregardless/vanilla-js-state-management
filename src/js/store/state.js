@@ -185,8 +185,6 @@ module.exports = {
 		id: 'C',
 		type: 'action',
 		text: 'Automated Call Confirmation before 3 days',
-		outdegree: 0,
-		indegree: 1,
 		connectedNodes: [
 		  { id: 'F', icon: '' },
 		  { id: 'G', icon: '' },

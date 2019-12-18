@@ -24,7 +24,7 @@ GRAPH_EXPLORER.setup = function setup () {
 
   LCA.setup(this.exploredNodes, state.adjL.root);
 
-  POSITION_GENERATOR.setup(this.exploredNodes, state.adjL.root);
+  POSITION_GENERATOR.setup(this.exploredNodes, state.adjL.root, LCA);
 
   // console.log(`LCA(actionThree, actionTwo) is ${this.findLCA('actionThree', 'actionTwo')}`);
   // console.log(`LCA(filterOne, actionTwo) is ${this.findLCA('filterOne', 'actionTwo')}`);

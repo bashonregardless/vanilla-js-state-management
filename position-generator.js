@@ -16,9 +16,10 @@
 
 var POSITION_GENERATOR = {};
 
-POSITION_GENERATOR.setup = function setup (adjacencyLists, rootName) {
+POSITION_GENERATOR.setup = function setup (adjacencyLists, rootName, LCA) {
   this.adjacencyLists = adjacencyLists;
   this.rootName = rootName;
+  this.LCA = LCA;
 
   this.exploredNodes = {};
   this.processingNodesQueue = [];
@@ -92,11 +93,11 @@ POSITION_GENERATOR.updatePositionNodes = function updatePositionNodes (processin
 	return;
   }
 
-  forwardEdges.forEach( function (connectedNode, idx) {
+  forwardEdges.forEach( function (connectedNode, index) {
 	const { id: nodeName, icon = '', label = '' } = connectedNode;
 	/* if node hasn't been processed yet, push it to processing queue */
 	if (!Object.prototype.hasOwnProperty.call(this.exploredNodes, nodeName)) {
-	  const xCell = this.getXCellVal(idx, processingNode.xCell, totalTreeEdge);
+	  const xCell = this.getXCellVal(index, processingNode.xCell, totalTreeEdge);
 
 	  /* update xCell min and max */
 	  if (xCell < this.minXCell) this.minXCell = xCell;
@@ -106,6 +107,7 @@ POSITION_GENERATOR.updatePositionNodes = function updatePositionNodes (processin
 		...this.adjacencyLists[nodeName],
 		depth: processingNode.depth + 1,
 		xCell,
+		index,
 	  });
 
 	  /* update max depth */
@@ -132,11 +134,11 @@ POSITION_GENERATOR.generatePositions = function generatePositions () {
 
 	this.updatePositionNodes(processingNode);
 
-	const { xCell, depth, id } = processingNode;
+	const { xCell, depth, id, index } = processingNode;
 
 	/* check for collisions */
 	if (this.lookupGridElement(xCell, depth, id)) {
-	  //this.resolveCollision(this.grid[`${x},${y}`], nodeName);
+	  this.resolveCollision(this.grid[`${xCell},${depth}`], id, index);
 	}
 
 	/* add element to grid */
@@ -146,6 +148,7 @@ POSITION_GENERATOR.generatePositions = function generatePositions () {
 	this.exploredNodes[id] = new this.newPositionNode(
 	  depth, 
 	  xCell,
+	  index,
 	);
   }
 }
@@ -158,8 +161,56 @@ POSITION_GENERATOR.lookupGridElement = function lookupGridElement (x, y, nodeNam
   return Object.prototype.hasOwnProperty.call(this.grid, `${x},${y}`);
 }
 
-POSITION_GENERATOR.resolveCollision = function resolveCollision (occupantNode, newNode) {
-  this.findLCA(occupantNode, newNode);
+POSITION_GENERATOR.resolveCollision = function resolveCollision (occupantNode, newNode, newNodeIndex) {
+  const newNodeXCell = this.getXCellVal(newNodeIndex, this.exploredNodes[this.adjacencyLists[newNode].parent].xCell, this.adjacencyLists[this.adjacencyLists[newNode].parent].forwardEdges.length);
+  const lca = this.LCA.findLCA(occupantNode, newNode);
+
+  // find new node spine root which is child of lca
+  let stub = this.adjacencyLists[newNode];
+  while (stub.parent !== lca) {
+	stub = this.adjacencyLists[stub.parent];
+  }
+
+  let spineRootIdx;
+  this.adjacencyLists[lca].forwardEdges.forEach(function getSpineRootIdx (connectedNode, index) {
+	if (connectedNode.id === stub.id) {
+	  spineRootIdx = index;
+	}
+  })
+
+  /* Decision? to shift left or to shift right */
+  let shiftDirection;
+  // check the leftmost child of lca to see if the cell left to it is vacant
+  if (!Object.prototype.hasOwnProperty.call(this.grid, `${this.exploredNodes[this.adjacencyLists[lca].forwardEdges[0].id].xCell - 1}, ${this.exploredNodes[this.adjacencyLists[lca].forwardEdges[0].id].depth}`)) {
+	shiftDirection = 'left';
+
+	let shiftSteps;
+	//(case 1) is leftmost node of new colliding node beyound leftmost node of LCA's leftmost child
+	if (this.exploredNodes[this.adjacencyLists[this.adjacencyLists[lca].forwardEdges[0].id].forwardEdges[0].id].xCell > newNodeXCell) {
+	  shiftSteps = Math.ceil(this.adjacencyLists[newNode].parent.forwardEdges.length / 2);
+	} 
+
+	//(case 2) is leftmost node of new colliding node colliding with one of children of LCA[spineRootIdx - 1]
+	const caseTwo = this.adjacencyLists[this.adjacencyLists[lca].forwardEdges[spineRootIdx - 1].id].forwardEdges.some(function (connectedNode) {
+	  return this.exploredNodes[connectedNode.id].xCell >= newNodeXCell
+	}.bind(this))
+
+	if (caseTwo) {
+	  shiftSteps = (Math.floor(this.adjacencyLists[this.adjacencyLists[lca].forwardEdges[spineRootIdx - 1].id].forwardEdges.length / 2) + Math.ceil(this.adjacencyLists[newNode].forwardEdges.length / 2)) -
+		Math.abs((Math.abs(newNodeXCell) - Math.abs(this.exploredNodes[this.adjacencyLists[lca].forwardEdges[spineRootIdx - 1].id].xCell)))
+	  let hi;
+	}
+	
+	//(case 3) is leftmost node of new colliding node colliding with one of children of LCA[0..spineRootIdx - 2]
+  } else {
+	shiftDirection = 'right';
+  }
+
+
+  //for (let i = spineRootIdx; i < this.adjacencyLists[lca].forwardEdges.length; i++) {
+
+  //  this.exploredNodes[this.adjacencyLists[lca].forwardEdges[i]].xCell.
+  //}
 }
 
 module.exports = POSITION_GENERATOR;

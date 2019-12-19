@@ -31,6 +31,9 @@ POSITION_GENERATOR.setup = function setup (adjacencyLists, rootName, LCA) {
 
   this.grid = {};
   
+  this.resolvingNodes = {};
+  this.collisionResolveQueue = [];
+
   this.generatePositions();
 
   console.log(JSON.stringify({
@@ -162,7 +165,12 @@ POSITION_GENERATOR.lookupGridElement = function lookupGridElement (x, y, nodeNam
 }
 
 POSITION_GENERATOR.resolveCollision = function resolveCollision (occupantNode, newNode, newNodeIndex) {
-  const newNodeXCell = this.getXCellVal(newNodeIndex, this.exploredNodes[this.adjacencyLists[newNode].parent].xCell, this.adjacencyLists[this.adjacencyLists[newNode].parent].forwardEdges.length);
+
+  const newNodeXCell = this.getXCellVal(
+	newNodeIndex,
+	this.exploredNodes[this.adjacencyLists[newNode].parent].xCell,
+	this.adjacencyLists[this.adjacencyLists[newNode].parent].forwardEdges.length
+  );
   const lca = this.LCA.findLCA(occupantNode, newNode);
 
   // find new node spine root which is child of lca
@@ -181,7 +189,10 @@ POSITION_GENERATOR.resolveCollision = function resolveCollision (occupantNode, n
   /* Decision? to shift left or to shift right */
   let shiftDirection;
   // check the leftmost child of lca to see if the cell left to it is vacant
-  if (!Object.prototype.hasOwnProperty.call(this.grid, `${this.exploredNodes[this.adjacencyLists[lca].forwardEdges[0].id].xCell - 1}, ${this.exploredNodes[this.adjacencyLists[lca].forwardEdges[0].id].depth}`)) {
+  if (!Object.prototype.hasOwnProperty.call(
+	this.grid,
+	`${this.exploredNodes[this.adjacencyLists[lca].forwardEdges[0].id].xCell - 1}, ${this.exploredNodes[this.adjacencyLists[lca].forwardEdges[0].id].depth}`
+  )) {
 	shiftDirection = 'left';
 
 	let shiftSteps;
@@ -196,21 +207,66 @@ POSITION_GENERATOR.resolveCollision = function resolveCollision (occupantNode, n
 	}.bind(this))
 
 	if (caseTwo) {
-	  shiftSteps = (Math.floor(this.adjacencyLists[this.adjacencyLists[lca].forwardEdges[spineRootIdx - 1].id].forwardEdges.length / 2) + Math.ceil(this.adjacencyLists[newNode].forwardEdges.length / 2)) -
+	  shiftSteps = (Math.floor(this.adjacencyLists[this.adjacencyLists[lca].forwardEdges[spineRootIdx - 1].id].forwardEdges.length / 2) +
+		Math.ceil(this.adjacencyLists[newNode].forwardEdges.length / 2)) -
 		Math.abs((Math.abs(newNodeXCell) - Math.abs(this.exploredNodes[this.adjacencyLists[lca].forwardEdges[spineRootIdx - 1].id].xCell)))
-	  let hi;
 	}
 	
 	//(case 3) is leftmost node of new colliding node colliding with one of children of LCA[0..spineRootIdx - 2]
+	
+
+	for (let i = 0; i <= spineRootIdx - 1; i++) {
+	  delete this.grid[`${this.exploredNodes[this.adjacencyLists[lca].forwardEdges[i].id].xCell},${this.exploredNodes[this.adjacencyLists[lca].forwardEdges[i].id].depth}`]
+	  this.exploredNodes[this.adjacencyLists[lca].forwardEdges[i].id].xCell = this.exploredNodes[this.adjacencyLists[lca].forwardEdges[i].id].xCell - shiftSteps;
+	  this.setGridElement(
+		this.exploredNodes[this.adjacencyLists[lca].forwardEdges[i].id].xCell,
+		this.exploredNodes[this.adjacencyLists[lca].forwardEdges[i].id].depth,
+		this.adjacencyLists[lca].forwardEdges[i].id
+	  );
+
+	  this.collisionResolveQueue.push(this.adjacencyLists[lca].forwardEdges[i].id);
+
+	  while (this.collisionResolveQueue.length) {
+		const resolvingNode = this.collisionResolveQueue.shift();
+		this.updateAfterCollision(resolvingNode, newNode);
+	  }
+	}
   } else {
 	shiftDirection = 'right';
   }
+}
 
+POSITION_GENERATOR.updateAfterCollision = function updateAfterCollision (processingNode, newNode) {
+  const { forwardEdges } = this.adjacencyLists[processingNode];
+  const { length: outdegree } = forwardEdges;
 
-  //for (let i = spineRootIdx; i < this.adjacencyLists[lca].forwardEdges.length; i++) {
+  const totalTreeEdge = forwardEdges.filter(function countTreeEdge (node) {
+    return !Object.prototype.hasOwnProperty.call(this.resolvingNodes, node.id);
+  }.bind(this)).length;
 
-  //  this.exploredNodes[this.adjacencyLists[lca].forwardEdges[i]].xCell.
-  //}
+  if (outdegree === 0) {
+	return;
+  }
+
+  forwardEdges.forEach(function (connectedNode, index) {
+	const { id: nodeName, icon = '', label = '' } = connectedNode;
+	if (Object.prototype.hasOwnProperty.call(this.exploredNodes, nodeName)) {
+	  /* if node hasn't been processed yet, push it to processing queue */
+	  if (!Object.prototype.hasOwnProperty.call(this.resolvingNodes, nodeName)) {
+		const xCell = this.getXCellVal(index, this.exploredNodes[processingNode].xCell, totalTreeEdge);
+
+		/* update xCell min and max */
+		if (xCell < this.minXCell) this.minXCell = xCell;
+		if (xCell > this.maxXCell) this.maxXCell = xCell;
+
+		
+		delete this.grid[`${this.exploredNodes[nodeName].xCell},${this.exploredNodes[nodeName].depth}`];
+		this.setGridElement(xCell, this.exploredNodes[nodeName].depth, nodeName);
+		this.exploredNodes[nodeName].xCell = xCell;
+		this.collisionResolveQueue.push(nodeName);
+	  } 
+	}
+  }.bind(this))
 }
 
 module.exports = POSITION_GENERATOR;

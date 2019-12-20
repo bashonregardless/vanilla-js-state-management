@@ -280,7 +280,7 @@
 
 module.exports = {
   adjL: {
-	rootL: 'A',
+	root: 'A',
 	nodes: {
 	  A: {
 		id: 'A',
@@ -492,6 +492,90 @@ module.exports = {
 		  'MM',
 		  'NN'
 		]
+	  },
+	  AA: {
+		id: 'AA',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  BB: {
+		id: 'BB',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  CC: {
+		id: 'CC',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  DD: {
+		id: 'DD',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  EE: {
+		id: 'EE',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  FF: {
+		id: 'FF',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  GG: {
+		id: 'GG',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  HH: {
+		id: 'HH',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  II: {
+		id: 'II',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  JJ: {
+		id: 'JJ',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  KK: {
+		id: 'KK',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  LL: {
+		id: 'LL',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  MM: {
+		id: 'MM',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  NN: {
+		id: 'NN',
+		type: 'filter',
+		text: 'Call from Care Coordinator',
+		connectedNodes: []
 	  },
 	}
   }

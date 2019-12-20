@@ -22,9 +22,9 @@ GRAPH_EXPLORER.setup = function setup () {
  
   this.buildGraph();
 
-  LCA.setup(this.exploredNodes, state.adjL.root);
+  //LCA.setup(this.exploredNodes, state.adjL.root);
 
-  POSITION_GENERATOR.setup(this.exploredNodes, state.adjL.root, LCA);
+  //POSITION_GENERATOR.setup(this.exploredNodes, state.adjL.root, LCA);
 
   // console.log(`LCA(actionThree, actionTwo) is ${this.findLCA('actionThree', 'actionTwo')}`);
   // console.log(`LCA(filterOne, actionTwo) is ${this.findLCA('filterOne', 'actionTwo')}`);
@@ -35,12 +35,12 @@ GRAPH_EXPLORER.setup = function setup () {
   //console.log(`LCA(K, E) is ${LCA.findLCA('K', 'E')}`);
   //console.log(`LCA(J, H) is ${LCA.findLCA('J', 'H')}`);
 
-  //console.log(JSON.stringify({
-  //  nodes: this.exploredNodes,
-  //  minXCell: POSITION_GENERATOR.minXCell,
-  //  maxXCell: POSITION_GENERATOR.maxXCell,
-  //  maxDepth: POSITION_GENERATOR.maxDepth
-  //}));
+  console.log(JSON.stringify({
+    nodes: this.exploredNodes,
+    minXCell: POSITION_GENERATOR.minXCell,
+    maxXCell: POSITION_GENERATOR.maxXCell,
+    maxDepth: POSITION_GENERATOR.maxDepth
+  }));
 }
 
 GRAPH_EXPLORER.newProcessedNode = function newProcessedNode (

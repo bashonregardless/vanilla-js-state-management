@@ -1,198 +1,11 @@
-/* Basic assumptions:
- *
- * In calculation of depth,
- * If a node that does not exist in exploredNodes list is explored from a node then
- * assign it a depth one greater than the depth of the node that it is being explored from.
- */
-
-/* Edge Classification :-
- *
- * Tree Edge: Visit new vertex via edge.
- *
- * Forward Edge: Node -> Decendant
- *
- * Back Edge: Node -> Ancestor
- */
-
-var POSITION_GENERATOR = {};
+var POSITION_GENERATOR = require('./position-generator');
+var COLLISION_RESOLVER = Object.create(POSITION_GENERATOR);
 
 const ownProp = Object.prototype.hasOwnProperty;
 
-POSITION_GENERATOR.setup = function setup (adjacencyLists, rootId, LCA) {
-  this.adjacencyLists = adjacencyLists;
-  this.rootId = rootId;
-  this.LCA = LCA;
-
-  this.exploredNodes = {};
-  this.processingNodesQueue = [];
- 
-  this.minXCell = 0;
-  this.maxXCell = 0;
-
-  this.maxDepth = 0;
-
-  this.grid = {};
-  
+COLLISION_RESOLVER.setup = function setup (adjacencyLists, rootId, LCA) {
   this.resolvingNodes = {};
   this.collisionResolveQueue = [];
-
-  this.generatePositions();
-
-  console.log(JSON.stringify({
-	nodes: this.exploredNodes,
-	minXCell: this.minXCell,
-	maxXCell: this.maxXCell,
-	maxDepth: this.maxDepth
-  }));
-}
-
-/* xCell calculation assumption: 
- *
- * if treeedge is 1: only child renders on parent Axis.
- *
- * if treeedge is even: [1..n/2] nodes render to the left of parent Axis and [n/2 + 1..n] render to the right.
- * Nothing renders on parent Axis.
- *
- * if treeedge is odd: [1..floor(n/2)] nodes render to the left of parent Axis
- * and [floor(n/2) + 2..n] nodes render to the right.
- * [floor(n/2) + 1] renders on the parent Axis.
- */
-POSITION_GENERATOR.getXCellVal = function getXCellVal (idx, xCell, treeedge) {
-  /* treeedge is odd */
-  if (treeedge & 1) {
-    if (idx + 1 === Math.floor(treeedge / 2) + 1) {
-      return xCell;
-    } else if (idx + 1 < Math.floor(treeedge / 2) + 1) {
-      return xCell - (idx + 1)
-    } else {
-      return xCell + (idx + 1 - (Math.floor(treeedge / 2) + 1))
-    }
-  }
-
-  /* treeedge is even */
-  else {
-    if (idx < treeedge / 2) {
-      return xCell - (idx + 1);
-    } else {
-      return xCell + (idx + 1 - treeedge / 2);
-    }
-  }
-}
-
-POSITION_GENERATOR.newPositionNode = function newPositionNode (
-  depth, xCell, index, totalTreeEdges
-) {
-  this.depth = depth;
-  this.xCell = xCell;
-  this.index = index;
-  this.totalTreeEdges = totalTreeEdges;
-}
-
-POSITION_GENERATOR.calTotalTreeEdges = function calTotalTreeEdges (forwardEdges) {
-  return forwardEdges.filter(function countTreeEdge (node) {
-	return !ownProp.call(this.exploredNodes, node.id);
-  }.bind(this)).length;
-}
-
-POSITION_GENERATOR.updatePositionNodes = function updatePositionNodes (processingNode) {
-  const { forwardEdges } = this.adjacencyLists[processingNode.id];
-  const { length: outdegree } = forwardEdges;
-
-  //const totalTreeEdge = forwardEdges.filter(function countTreeEdge (node) {
-  //  return !ownProp.call(this.exploredNodes, node.id);
-  //}.bind(this)).length;
-
-  // update xCell of processing node
-  if (processingNode.parent) {
-	processingNode.xCell = this.getXCellVal(
-	  processingNode.index,
-	  this.exploredNodes[processingNode.parent].xCell,
-	  //this.calTotalTreeEdges(this.exploredNodes[processingNode.parent].totalTreeEdges)
-	  this.exploredNodes[processingNode.parent].totalTreeEdges
-	);
-	processingNode.totalTreeEdges = this.calTotalTreeEdges(forwardEdges);
-  }
-
-  if (outdegree === 0) {
-	return;
-  }
-
-  forwardEdges.forEach( function (connectedNode, index) {
-	const { id: nodeName, icon = '', label = '' } = connectedNode;
-	/* if node hasn't been processed yet, push it to processing queue */
-	if (!ownProp.call(this.exploredNodes, nodeName)) {
-	  const xCell = this.getXCellVal(
-		index,
-		processingNode.xCell,
-		this.calTotalTreeEdges(forwardEdges)
-	  );
-
-	  /* update xCell min and max */
-	  if (xCell < this.minXCell) this.minXCell = xCell;
-	  if (xCell > this.maxXCell) this.maxXCell = xCell;
-
-	  this.processingNodesQueue.push({
-		...this.adjacencyLists[nodeName],
-		depth: processingNode.depth + 1,
-		xCell,
-		index,
-	  });
-
-	  /* update max depth */
-	  if (processingNode.depth + 1 > this.maxDepth) this.maxDepth = processingNode.depth + 1;
-	} 
-  }.bind(this))
-}
-
-/* Positions are generated with BFS exploration of the graph.
- * This allows us to figure out the direction in which nodes 
- * are to be adjusted to resolve collisions.
- */
-POSITION_GENERATOR.generatePositions = function generatePositions () {
-  if (this.rootId) {
-	this.processingNodesQueue.push({ 
-	  ...this.adjacencyLists[this.rootId],
-	  depth: 0,
-	  xCell: 0,
-	  index: 0,
-	  totalTreeEdges: this.adjacencyLists[this.rootId].forwardEdges.length,
-	});
-  }
-
-  while (this.processingNodesQueue.length) {
-	const processingNode = this.processingNodesQueue.shift();
-
-	this.updatePositionNodes(processingNode);
-
-	const { xCell, depth, id, index, totalTreeEdges } = processingNode;
-
-	/* check for collisions */
-	if (this.lookupGridElement(xCell, depth)) {
-	  this.resolveCollision(this.grid[`${xCell},${depth}`], id, index);
-	}
-
-	/* add element to grid */
-	this.setGridElement(xCell, depth, id, totalTreeEdges);
-
-	/* once node has been explored, add it to explored list */
-	this.exploredNodes[id] = new this.newPositionNode(
-	  depth, 
-	  xCell,
-	  index,
-	  totalTreeEdges,
-	);
-  }
-}
-
-POSITION_GENERATOR.setGridElement = function setGridElement (x, y, id, totalTreeEdges) {
-  this.grid[`${x},${y}`] = id;
-  if (totalTreeEdges !== 0 && totalTreeEdges % 2 === 0) {
-	this.grid[`${x},${y + 1}`] = `${id}_pseudo`;
-  }
-}
-
-POSITION_GENERATOR.lookupGridElement = function lookupGridElement (x, y) {
-  return ownProp.call(this.grid, `${x},${y}`);
 }
 
 /* FACT:
@@ -208,9 +21,9 @@ POSITION_GENERATOR.lookupGridElement = function lookupGridElement (x, y) {
  * - Is LCA always exactly the node two level higher?
  *
  * ANSWER:
- * - LCA will always be a node two level higher is wrong.
+ * - LCA will always be a node two level higher is wrong!
  */
-POSITION_GENERATOR.resolveCollision = function resolveCollision (
+COLLISION_RESOLVER.resolveCollision = function resolveCollision (
   occupantNode, 
   newNode,
   newNodeIndex
@@ -363,7 +176,7 @@ POSITION_GENERATOR.resolveCollision = function resolveCollision (
 		this.exploredNodes[lcaForwardEdges[i].id].xCell,
 		depth,
 		lcaForwardEdgeId,
-		totalTreeEdges
+		totalTreeEdges,
 	  );
 
 	  this.collisionResolveQueue.push(lcaForwardEdgeId);
@@ -376,7 +189,7 @@ POSITION_GENERATOR.resolveCollision = function resolveCollision (
   }
 }
 
-POSITION_GENERATOR.updateAfterCollision = function updateAfterCollision (processingNode, newNode) {
+COLLISION_RESOLVER.updateAfterCollision = function updateAfterCollision (processingNode, newNode) {
   const { forwardEdges } = this.adjacencyLists[processingNode];
   const { length: outdegree } = forwardEdges;
 
@@ -397,6 +210,7 @@ POSITION_GENERATOR.updateAfterCollision = function updateAfterCollision (process
 		  [id]: {
 			xCell,
 			depth,
+			totalTreeEdges,
 		  }
 		} = this.exploredNodes;
 
@@ -419,4 +233,4 @@ POSITION_GENERATOR.updateAfterCollision = function updateAfterCollision (process
   }.bind(this))
 }
 
-module.exports = POSITION_GENERATOR;
+module.exports = COLLISION_RESOLVER;

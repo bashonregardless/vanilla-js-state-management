@@ -2,9 +2,7 @@
   "nodes": {
     "A": {
       "id": "A",
-      "depth": 1,
-      "xCell": 0,
-      "forwardEdge": [
+      "forwardEdges": [
         {
           "id": "B",
           "icon": "",
@@ -21,9 +19,7 @@
     },
     "B": {
       "id": "B",
-      "depth": 2,
-      "xCell": -1,
-      "forwardEdge": [
+      "forwardEdges": [
         {
           "id": "D",
           "icon": "",
@@ -40,14 +36,19 @@
     },
     "C": {
       "id": "C",
-      "depth": 2,
-      "xCell": 1,
-      "forwardEdge": [
+      "forwardEdges": [
         {
           "id": "F",
           "icon": "",
           "label": ""
-        },
+        }
+      ],
+      "backEdge": [],
+      "parent": "A"
+    },
+    "D": {
+      "id": "D",
+      "forwardEdges": [
         {
           "id": "G",
           "icon": "",
@@ -60,51 +61,35 @@
         }
       ],
       "backEdge": [],
-      "parent": "A"
-    },
-    "D": {
-      "id": "D",
-      "depth": 3,
-      "xCell": -2,
-      "forwardEdge": [],
-      "backEdge": [],
       "parent": "B"
     },
     "E": {
       "id": "E",
-      "depth": 3,
-      "xCell": 0,
-      "forwardEdge": [
-        {
-          "id": "K",
-          "icon": "",
-          "label": "Not Responded"
-        }
-      ],
+      "forwardEdges": [],
       "backEdge": [],
       "parent": "B"
     },
     "F": {
       "id": "F",
-      "depth": 3,
-      "xCell": 0,
-      "forwardEdge": [
-        {
-          "id": "I",
-          "icon": "",
-          "label": ""
-        }
-      ],
+      "forwardEdges": [],
       "backEdge": [],
       "parent": "C"
     },
     "G": {
       "id": "G",
-      "depth": 3,
-      "xCell": 1,
-      "forwardEdge": [
+      "forwardEdges": [
+        {
+          "id": "I",
+          "icon": "",
+          "label": ""
+        },
         {
           "id": "J",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "K",
           "icon": "",
           "label": ""
         },
@@ -114,21 +99,12 @@
           "label": ""
         },
         {
-          "id": "N",
+          "id": "M",
           "icon": "",
           "label": ""
-        }
-      ],
-      "backEdge": [],
-      "parent": "C"
-    },
-    "H": {
-      "id": "H",
-      "depth": 3,
-      "xCell": 2,
-      "forwardEdge": [
+        },
         {
-          "id": "M",
+          "id": "N",
           "icon": "",
           "label": ""
         },
@@ -139,66 +115,341 @@
         }
       ],
       "backEdge": [],
-      "parent": "C"
+      "parent": "D"
     },
-    "K": {
-      "id": "K",
-      "depth": 4,
-      "xCell": 0,
-      "forwardEdge": [],
+    "H": {
+      "id": "H",
+      "forwardEdges": [],
       "backEdge": [],
-      "parent": "E"
+      "parent": "D"
     },
     "I": {
       "id": "I",
-      "depth": 4,
-      "xCell": 0,
-      "forwardEdge": [],
+      "forwardEdges": [
+        {
+          "id": "P",
+          "icon": "",
+          "label": ""
+        }
+      ],
       "backEdge": [],
-      "parent": "F"
+      "parent": "G"
     },
     "J": {
       "id": "J",
-      "depth": 4,
-      "xCell": 0,
-      "forwardEdge": [],
+      "forwardEdges": [
+        {
+          "id": "Q",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "G"
+    },
+    "K": {
+      "id": "K",
+      "forwardEdges": [],
       "backEdge": [],
       "parent": "G"
     },
     "L": {
       "id": "L",
-      "depth": 4,
-      "xCell": 1,
-      "forwardEdge": [],
-      "backEdge": [],
-      "parent": "G"
-    },
-    "N": {
-      "id": "N",
-      "depth": 4,
-      "xCell": 2,
-      "forwardEdge": [],
+      "forwardEdges": [
+        {
+          "id": "R",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "S",
+          "icon": "",
+          "label": ""
+        }
+      ],
       "backEdge": [],
       "parent": "G"
     },
     "M": {
       "id": "M",
-      "depth": 4,
-      "xCell": 1,
-      "forwardEdge": [],
+      "forwardEdges": [],
       "backEdge": [],
-      "parent": "H"
+      "parent": "G"
+    },
+    "N": {
+      "id": "N",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "G"
     },
     "O": {
       "id": "O",
-      "depth": 4,
-      "xCell": 3,
-      "forwardEdge": [],
+      "forwardEdges": [],
       "backEdge": [],
-      "parent": "H"
+      "parent": "G"
+    },
+    "P": {
+      "id": "P",
+      "forwardEdges": [
+        {
+          "id": "T",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "I"
+    },
+    "Q": {
+      "id": "Q",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "J"
+    },
+    "R": {
+      "id": "R",
+      "forwardEdges": [
+        {
+          "id": "U",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "V",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "W",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "L"
+    },
+    "S": {
+      "id": "S",
+      "forwardEdges": [
+        {
+          "id": "X",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "L"
+    },
+    "T": {
+      "id": "T",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "P"
+    },
+    "U": {
+      "id": "U",
+      "forwardEdges": [
+        {
+          "id": "Y",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "R"
+    },
+    "V": {
+      "id": "V",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "R"
+    },
+    "W": {
+      "id": "W",
+      "forwardEdges": [
+        {
+          "id": "Z",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "R"
+    },
+    "X": {
+      "id": "X",
+      "forwardEdges": [
+        {
+          "id": "AA",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "BB",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "S"
+    },
+    "Y": {
+      "id": "Y",
+      "forwardEdges": [
+        {
+          "id": "CC",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "DD",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "EE",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "U"
+    },
+    "Z": {
+      "id": "Z",
+      "forwardEdges": [
+        {
+          "id": "FF",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "GG",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "HH",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "II",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "JJ",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "KK",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "LL",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "MM",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "NN",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "W"
+    },
+    "AA": {
+      "id": "AA",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "X"
+    },
+    "BB": {
+      "id": "BB",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "X"
+    },
+    "CC": {
+      "id": "CC",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "Y"
+    },
+    "DD": {
+      "id": "DD",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "Y"
+    },
+    "EE": {
+      "id": "EE",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "Y"
+    },
+    "FF": {
+      "id": "FF",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "Z"
+    },
+    "GG": {
+      "id": "GG",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "Z"
+    },
+    "HH": {
+      "id": "HH",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "Z"
+    },
+    "II": {
+      "id": "II",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "Z"
+    },
+    "JJ": {
+      "id": "JJ",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "Z"
+    },
+    "KK": {
+      "id": "KK",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "Z"
+    },
+    "LL": {
+      "id": "LL",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "Z"
+    },
+    "MM": {
+      "id": "MM",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "Z"
+    },
+    "NN": {
+      "id": "NN",
+      "forwardEdges": [],
+      "backEdge": [],
+      "parent": "Z"
     }
-  },
-  "minXCell": -2,
-  "maxXCell": 3,
-  "maxDepth": 4
+  }
 }

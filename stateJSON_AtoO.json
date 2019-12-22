@@ -1,0 +1,204 @@
+{
+  "nodes": {
+    "A": {
+      "id": "A",
+      "depth": 1,
+      "xCell": 0,
+      "forwardEdge": [
+        {
+          "id": "B",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "C",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": null
+    },
+    "B": {
+      "id": "B",
+      "depth": 2,
+      "xCell": -1,
+      "forwardEdge": [
+        {
+          "id": "D",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "E",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "A"
+    },
+    "C": {
+      "id": "C",
+      "depth": 2,
+      "xCell": 1,
+      "forwardEdge": [
+        {
+          "id": "F",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "G",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "H",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "A"
+    },
+    "D": {
+      "id": "D",
+      "depth": 3,
+      "xCell": -2,
+      "forwardEdge": [],
+      "backEdge": [],
+      "parent": "B"
+    },
+    "E": {
+      "id": "E",
+      "depth": 3,
+      "xCell": 0,
+      "forwardEdge": [
+        {
+          "id": "K",
+          "icon": "",
+          "label": "Not Responded"
+        }
+      ],
+      "backEdge": [],
+      "parent": "B"
+    },
+    "F": {
+      "id": "F",
+      "depth": 3,
+      "xCell": 0,
+      "forwardEdge": [
+        {
+          "id": "I",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "C"
+    },
+    "G": {
+      "id": "G",
+      "depth": 3,
+      "xCell": 1,
+      "forwardEdge": [
+        {
+          "id": "J",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "L",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "N",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "C"
+    },
+    "H": {
+      "id": "H",
+      "depth": 3,
+      "xCell": 2,
+      "forwardEdge": [
+        {
+          "id": "M",
+          "icon": "",
+          "label": ""
+        },
+        {
+          "id": "O",
+          "icon": "",
+          "label": ""
+        }
+      ],
+      "backEdge": [],
+      "parent": "C"
+    },
+    "K": {
+      "id": "K",
+      "depth": 4,
+      "xCell": 0,
+      "forwardEdge": [],
+      "backEdge": [],
+      "parent": "E"
+    },
+    "I": {
+      "id": "I",
+      "depth": 4,
+      "xCell": 0,
+      "forwardEdge": [],
+      "backEdge": [],
+      "parent": "F"
+    },
+    "J": {
+      "id": "J",
+      "depth": 4,
+      "xCell": 0,
+      "forwardEdge": [],
+      "backEdge": [],
+      "parent": "G"
+    },
+    "L": {
+      "id": "L",
+      "depth": 4,
+      "xCell": 1,
+      "forwardEdge": [],
+      "backEdge": [],
+      "parent": "G"
+    },
+    "N": {
+      "id": "N",
+      "depth": 4,
+      "xCell": 2,
+      "forwardEdge": [],
+      "backEdge": [],
+      "parent": "G"
+    },
+    "M": {
+      "id": "M",
+      "depth": 4,
+      "xCell": 1,
+      "forwardEdge": [],
+      "backEdge": [],
+      "parent": "H"
+    },
+    "O": {
+      "id": "O",
+      "depth": 4,
+      "xCell": 3,
+      "forwardEdge": [],
+      "backEdge": [],
+      "parent": "H"
+    }
+  },
+  "minXCell": -2,
+  "maxXCell": 3,
+  "maxDepth": 4
+}

@@ -19,31 +19,38 @@
  */
 
 const state = require('./src/js/store/state.js');
-const LCA = require('./lca-algo');
 const POSITION_GENERATOR = require('./position-generator');
 
-var GRAPH_EXPLORER = {};
+var GRAPH_EXPLORER = Object.create(
+  require('./position-generator')
+);
 
 GRAPH_EXPLORER.setup = function setup () {
   this.exploredNodes = {};
   this.processingNodesQueue = [];
  
+  this.positionGeneratorSetup(state.adjL.root);
   this.buildGraph();
 
-  POSITION_GENERATOR.setup(this.exploredNodes, state.adjL.root, LCA);
+  console.log(JSON.stringify({
+	nodes: this.nodes,
+	minX: this.minX,
+	maxX: this.maxX,
+	maxY: this.maxY
+  }));
 }
 
 GRAPH_EXPLORER.newProcessedNode = function newProcessedNode (
-  nodeName, forwardEdges, backEdge, parent
+  id, forwardEdges, backEdge, parent
 ) {
-  this.id = nodeName;
+  this.id = id;
   this.forwardEdges = forwardEdges;
   this.backEdge = backEdge;
   this.parent = parent;
 }
 
 GRAPH_EXPLORER.updateExploredNodes = function updateExploredNodes (processingNode) {
-  const { connectedNodes } = state.adjL.nodes[processingNode.nodeName];
+  const { connectedNodes } = state.adjL.nodes[processingNode.id];
   const { length: outdegree } = connectedNodes;
 
   if (outdegree === 0) {
@@ -51,31 +58,38 @@ GRAPH_EXPLORER.updateExploredNodes = function updateExploredNodes (processingNod
   }
 
   connectedNodes.forEach(function (connectedNode, idx) {
-	const { id: nodeName, icon = '', label = '' } = connectedNode;
+	const { 
+	  id: currNodeId, 
+	  icon = '', 
+	  label = '' 
+	} = connectedNode;
+
 	/* if node hasn't been processed yet, push it to processing queue */
-	if (!Object.prototype.hasOwnProperty.call(this.exploredNodes, nodeName)) {
+	if (!Object.prototype.hasOwnProperty.call(this.exploredNodes, currNodeId)) {
+	  this.insertNode(processingNode.id, currNodeId);
+
 	  this.processingNodesQueue.push({
-		nodeName: nodeName, 
+		id: currNodeId, 
 		forwardEdges: [],
 		backEdge: [],
 		parent: processingNode.nodeName,
 	  });
 
 	  // add discovered forward edge
-	  processingNode.forwardEdges.push( {id: nodeName, icon, label } );
+	  processingNode.forwardEdges.push( {id: currNodeId, icon, label } );
 	} 
 	// else a back edge is discovered
 	else {
-	  processingNode.backEdge.push( { id: nodeName, icon, label });
+	  processingNode.backEdge.push( { id: currNodeId, icon, label });
 	}
-  }.bind(this))
+  }, this);
 }
 
 
 GRAPH_EXPLORER.buildGraph = function buildGraph () {
   if (state.adjL.root) {
 	this.processingNodesQueue.push({ 
-	  nodeName: state.adjL.root,
+	  id: state.adjL.root,
 	  forwardEdges: [],
 	  backEdge: [],
 	  parent: null,
@@ -87,11 +101,16 @@ GRAPH_EXPLORER.buildGraph = function buildGraph () {
 
 	this.updateExploredNodes(processingNode);
 
-	const { nodeName, forwardEdges, backEdge, parent } = processingNode;
+	const {
+	  id,
+	  forwardEdges,
+	  backEdge,
+	  parent
+	} = processingNode;
 
 	/* once node has been explored, add it to exploredQueue */
-	this.exploredNodes[nodeName] = new this.newProcessedNode(
-	  nodeName,
+	this.exploredNodes[id] = new this.newProcessedNode(
+	  id,
 	  forwardEdges,
 	  backEdge,
 	  parent,

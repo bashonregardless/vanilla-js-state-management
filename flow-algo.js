@@ -9,6 +9,15 @@
  * In other words, the nodes that can be reached in one step via an edge.
  */
 
+/* Edge Classification :-
+ *
+ * Tree Edge: Visit new vertex via edge.
+ *
+ * Forward Edge: Node -> Decendant
+ *
+ * Back Edge: Node -> Ancestor
+ */
+
 const state = require('./src/js/store/state.js');
 const LCA = require('./lca-algo');
 const POSITION_GENERATOR = require('./position-generator');
@@ -17,30 +26,11 @@ var GRAPH_EXPLORER = {};
 
 GRAPH_EXPLORER.setup = function setup () {
   this.exploredNodes = {};
-  this.exploredPositionNodes = {};
   this.processingNodesQueue = [];
  
   this.buildGraph();
 
-  LCA.setup(this.exploredNodes, state.adjL.root);
-
   POSITION_GENERATOR.setup(this.exploredNodes, state.adjL.root, LCA);
-
-  // console.log(`LCA(actionThree, actionTwo) is ${this.findLCA('actionThree', 'actionTwo')}`);
-  // console.log(`LCA(filterOne, actionTwo) is ${this.findLCA('filterOne', 'actionTwo')}`);
-  // console.log(`LCA(filterOne, actionThree) is ${this.findLCA('filterOne', 'actionThree')}`);
-  // console.log(`LCA(ifThenOne, actionThree) is ${this.findLCA('ifThenOne', 'actionThree')}`);
-  //console.log(`LCA(D, E) is ${LCA.findLCA('D', 'E')}`);
-  //console.log(`LCA(F, E) is ${LCA.findLCA('F', 'E')}`);
-  //console.log(`LCA(K, E) is ${LCA.findLCA('K', 'E')}`);
-  //console.log(`LCA(J, H) is ${LCA.findLCA('J', 'H')}`);
-
-  //console.log(JSON.stringify({
-  //  nodes: this.exploredNodes,
-  //  minXCell: POSITION_GENERATOR.minXCell,
-  //  maxXCell: POSITION_GENERATOR.maxXCell,
-  //  maxDepth: POSITION_GENERATOR.maxDepth
-  //}));
 }
 
 GRAPH_EXPLORER.newProcessedNode = function newProcessedNode (
@@ -60,7 +50,7 @@ GRAPH_EXPLORER.updateExploredNodes = function updateExploredNodes (processingNod
 	return;
   }
 
-  connectedNodes.forEach( function (connectedNode, idx) {
+  connectedNodes.forEach(function (connectedNode, idx) {
 	const { id: nodeName, icon = '', label = '' } = connectedNode;
 	/* if node hasn't been processed yet, push it to processing queue */
 	if (!Object.prototype.hasOwnProperty.call(this.exploredNodes, nodeName)) {

@@ -82,16 +82,16 @@ export default class Status extends Component {
 	  }
 	}
 
-	function getForwardEdgePath ({ depth, xCell, outdegree, forwardEdge, backEdge }) {
-	  return [...Array(forwardEdge.length).keys()].map( function (edgeNumber) {
+	function getForwardEdgePath ({ depth, xCell, outdegree, forwardEdges, backEdge }) {
+	  return [...Array(forwardEdges.length).keys()].map( function (edgeNumber) {
 		  return `
 		   <path stroke="black"
-			 d="M ${getXForwardEdgePathM(xCell, forwardEdge.length, edgeNumber)},${getYForwardEdgePathM(depth, forwardEdge.length, edgeNumber)}
-			 v ${getPathv(forwardEdge.length)}
-			 ${forwardEdge.length > 1 ? `m 0,0` : ''}
-			 ${forwardEdge.length > 1 ? `h ${getPathh(edgeNumber, forwardEdge.length, xCell)}` : 0}
-			 ${forwardEdge.length > 1 ? `m 0,0` : ''}
-			 ${forwardEdge.length > 1 ? `v ${getPathv(forwardEdge.length)}` : ''}"
+			 d="M ${getXForwardEdgePathM(xCell, forwardEdges.length, edgeNumber)},${getYForwardEdgePathM(depth, forwardEdges.length, edgeNumber)}
+			 v ${getPathv(forwardEdges.length)}
+			 ${forwardEdges.length > 1 ? `m 0,0` : ''}
+			 ${forwardEdges.length > 1 ? `h ${getPathh(edgeNumber, forwardEdges.length, xCell)}` : 0}
+			 ${forwardEdges.length > 1 ? `m 0,0` : ''}
+			 ${forwardEdges.length > 1 ? `v ${getPathv(forwardEdges.length)}` : ''}"
 		   />
 		   `;
 	  }).join('')
@@ -124,7 +124,7 @@ export default class Status extends Component {
 	  }
 	}
 
-	function getBackEdgePath ({ depth, xCell, outdegree, forwardEdge, backEdge, parent }) {
+	function getBackEdgePath ({ depth, xCell, outdegree, forwardEdges, backEdge, parent }) {
 	  return backEdge.map( function (connectedNode) {
 		const { id = '', icon = '', label = '' } = connectedNode;
 		return `
@@ -138,23 +138,31 @@ export default class Status extends Component {
 	  }).join('');
 	}
 
-	self.element.innerHTML = `
-	<svg viewBox="0 0 ${calSVGWidth()} ${calSVGHeight()}"
-	  width="${calSVGWidth()}"
-	  height="${calSVGHeight()}"
-	>
-	  ${Object.keys(store.state.nodes).map( item => {
-		const { depth, xCell, outdegree, forwardEdge, backEdge, parent } = store.state.nodes[item];
-		return `
-		<g id="${item}">
-		  <foreignObject x="${calcX(xCell)}" y="${((depth - 1) * 240)}" width="300" height="180">
-		    <div class="cell">${item}</div>
+
+	function insertNode (node) {
+	  var flat = [];
+	  function drawNode (curr) {
+		const { id , position, connectedNodes } = curr;
+		const { x, y } = position;
+		flat.push(`
+		<g id="${id}">
+		  <foreignObject x="${x}" y="${y}" width="180" height="100">
+			<div class="cell">${id}</div>
 		  </foreignObject>
-		  ${getForwardEdgePath(store.state.nodes[item])}
-		  ${getBackEdgePath(store.state.nodes[item])}
 		</g>
-		`
-	  }).join('')}
+		`)
+		connectedNodes.forEach(drawNode);
+	  }
+	  drawNode(node);
+	  return flat;
+	}
+
+	self.element.innerHTML = `
+	<svg viewBox="0 0 5500 1200"
+	  width="5500"
+	  height="1200"
+	>
+	  ${insertNode(store.state.nodes).join('')}
 	</svg>`;
   }
 }

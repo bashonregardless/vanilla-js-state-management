@@ -5,18 +5,20 @@ var POSITION_GENERATOR = {};
 POSITION_GENERATOR.positionGeneratorSetup = function positionGeneratorSetup (
   rootId
 ) {
-  this.boxWidth = 200;
-  this.boxHeight = 130;
+  this.boxWidth = 300;
+  this.boxHeight = 160;
 
   if (rootId) {
-	this.nodes = {
-	  id: rootId,
-	  position: {
-		x: 0,
-		y: 20,
-	  },
-	  connectedNodes: [],
-	}
+    this.nodes = {
+      id: rootId,
+      position: {
+        x: 0,
+        y: 20,
+      },
+      connectedNodes: [],
+    }
+    this.tempPosStorage = { [rootId]: {} };
+    this.tempPosStorage[rootId] = { x: 0, y: 20 }
   }
 
   this.minX = 0;
@@ -56,21 +58,27 @@ POSITION_GENERATOR.reposition = function reposition (node) {
 	left = node.position.x - this.boxWidth * (leafCount - 1) / 2;
 
   node.connectedNodes.forEach(function (connectedNode) {
-	var shift = this.boxWidth * this.getLeafCount(connectedNode);
-	left += shift;
-	const updatedX = left - (shift + this.boxWidth) / 2,
-	  updatedY = node.position.y + this.boxHeight;
-	connectedNode.position = {
-	  x: updatedX, 
-	  y: updatedY 
-	};
+    var shift = this.boxWidth * this.getLeafCount(connectedNode);
+    left += shift;
+    const updatedX = left - (shift + this.boxWidth) / 2,
+      updatedY = node.position.y + this.boxHeight;
+    connectedNode.position = {
+      x: updatedX,
+      y: updatedY
+    };
 
-	if (updatedX < this.minX)
-	  this.minX = updatedX;
-	if (updatedX > this.maxX)
-	  this.maxX = updatedX;
-	if (updatedY > this.maxY)
-	  this.maxY = updatedY;
+    if (Object.prototype.hasOwnProperty.call(this.exploredNodes, connectedNode.id)) {
+      this.exploredNodes[connectedNode.id].position = connectedNode.position;
+    } else {
+      this.tempPosStorage[connectedNode.id] = connectedNode.position;
+    }
+
+    if (updatedX < this.minX)
+      this.minX = updatedX;
+    if (updatedX > this.maxX)
+      this.maxX = updatedX;
+    if (updatedY > this.maxY)
+      this.maxY = updatedY;
 
 	this.reposition(connectedNode);
   }, this);

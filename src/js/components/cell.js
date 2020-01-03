@@ -18,12 +18,12 @@ export default class Status extends Component {
 	let self = this;
 
 	function calSVGWidth () {
-	  const { minXCell: min, maxXCell: max } = store.state;
-	  return 200 + ( (Math.abs(min) + Math.abs(max) + 1) * 60) + ( (Math.abs(min) + Math.abs(max) + 1) * 300)
+	  const { minX: min, maxX: max } = store.state;
+	  return 200 + Math.abs(min) + max
 	}
 
-	function calSVGHeight (depth) {
-	  return 200 + store.state.maxDepth * 240;
+	function calSVGHeight () {
+	  return 200 + store.state.maxY;
 	}
 
 	function calcX (xCell) {
@@ -158,9 +158,9 @@ export default class Status extends Component {
 	}
 
 	self.element.innerHTML = `
-	<svg viewBox="0 0 5500 1200"
-	  width="5500"
-	  height="1200"
+	<svg viewBox="-${calSVGWidth() / 2 - 300} 0 ${calSVGWidth()} ${calSVGHeight()}"
+	  width="${calSVGWidth()}"
+	  height="${calSVGHeight()}"
 	>
 	  ${insertNode(store.state.nodes).join('')}
 	</svg>`;

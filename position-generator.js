@@ -26,7 +26,7 @@ POSITION_GENERATOR.positionGeneratorSetup = function positionGeneratorSetup (
   this.maxY = 0;
 }
 
-POSITION_GENERATOR.insertNode = function insertNode (
+POSITION_GENERATOR.insertLeafNode = function insertLeafNode (
   processingNodeId, id
 ) {
   function insertNode (curr) {

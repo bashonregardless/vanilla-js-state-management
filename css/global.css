@@ -63,3 +63,10 @@ h1, h2 {
   height: 180px;
   background-color: grey;
 }
+
+.svg-el {
+  cursor: move;
+  height: 200px;
+  width: 200px;
+  background-color: blue;
+}

@@ -21,7 +21,7 @@ export default class Status extends Component {
 	self.element.innerHTML = `
 	  <svg 
 		viewBox="0 0 30 20"
-		class="svg-el"
+		class="genericNodeSvg"
 	  >
 		<rect 
 		  x="0"
@@ -36,10 +36,10 @@ export default class Status extends Component {
 		  width="8"
 		  height="10"
 		  fill="#007bff"
-		  class="draggable" 
+		  class="draggable confine" 
 		  data-drag="draggableNode"
 		/>
-		<rect x="18" y="5" width="8" height="10"   fill="#888"/>
+		<rect x="18" y="5" width="8" height="10" fill="#888"/>
 	  </svg>`;
   }
 }

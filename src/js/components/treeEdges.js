@@ -14,7 +14,7 @@ export default class TreeEdgeConnection extends Component {
   constructor(props) {
 	super({
 	  store,
-	  element: document.querySelector('.treeEdge-connections')
+	  element: props.element
 	});
 
 	this.node = props.node;
@@ -92,7 +92,6 @@ export default class TreeEdgeConnection extends Component {
 	  nodeId,
 	  connectedNodeId,
 	);
-
 
 	return `
 	  <marker

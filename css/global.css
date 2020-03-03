@@ -59,14 +59,18 @@ h1, h2 {
 }
 
 .cell {
-  width: 300px;
-  height: 180px;
+  width: 200px;
+  height: 100px;
   background-color: grey;
 }
 
-.svg-el {
+.genericNodeSvg {
   cursor: move;
   height: 200px;
   width: 200px;
   background-color: blue;
+}
+
+.draggable {
+  cursor: move;
 }

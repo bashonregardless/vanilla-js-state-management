@@ -21,7 +21,10 @@ treeEdgesGroup.setAttribute('class', 'treeEdge-connections');
 Object.values(store.state.nodeLookup).forEach(function renderTreeEdges(node) {
   const treeEdgesCount = node.forwardEdges.length;
   node.forwardEdges.forEach(function renderEdges(connection, index) {
-	const treeEdges = new TreeEdges({ node, connection, index, treeEdgesCount });
+	const pathEl= document.createElementNS("http://www.w3.org/2000/svg", 'g');
+	treeEdgesGroup.appendChild(pathEl);
+	treeEdgesGroup.setAttribute('class', `treeEdge-${node.id}-${connection.id}`);
+	const treeEdges = new TreeEdges({ element: pathEl, node, connection, index, treeEdgesCount });
 	treeEdges.render();
   });
 });

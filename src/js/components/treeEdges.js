@@ -101,7 +101,7 @@ export default class TreeEdgeConnection extends Component {
 	  />
 	  <path
 		id="connection-${nodeId}-${connectedNodeId}"
-		stroke='#d5d5d5'
+		stroke='#000000'
 		strokeWidth='2'
 		marker-end="url(#marker-treeEdge-${nodeId}-${connectedNodeId})"
 		d="${pathShape}"
@@ -111,8 +111,12 @@ export default class TreeEdgeConnection extends Component {
 
   render() {
 	let self = this;
+	console.log('treeEdges render');
 
-	self.element.innerHTML = this.getPath()
+	const inHtml = self.element.innerHTML;
+	const patth = this.getPath();
+
+	self.element.innerHTML = patth;
   }
 }
 

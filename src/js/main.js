@@ -23,7 +23,7 @@ Object.values(store.state.nodeLookup).forEach(function renderTreeEdges(node) {
   node.forwardEdges.forEach(function renderEdges(connection, index) {
 	const pathEl= document.createElementNS("http://www.w3.org/2000/svg", 'g');
 	treeEdgesGroup.appendChild(pathEl);
-	treeEdgesGroup.setAttribute('class', `treeEdge-${node.id}-${connection.id}`);
+	pathEl.setAttribute('class', `treeEdge-${node.id}-${connection.id}`);
 	const treeEdges = new TreeEdges({ element: pathEl, node, connection, index, treeEdgesCount });
 	treeEdges.render();
   });
@@ -62,7 +62,7 @@ function startDrag(evt) {
 
 function getMousePosition(evt) {
   console.log('inside getMousePosition');
-  var CTM = svgDraggableNode.getScreenCTM();
+  var CTM = evt.target.getScreenCTM();
   return {
 	x: (evt.clientX - CTM.e) / CTM.a,
 	y: (evt.clientY - CTM.f) / CTM.d
@@ -80,7 +80,15 @@ function drag(evt) {
 }
 
 function endDrag(evt) {
-  console.log('inside drag');
+  console.log('inside end drag');
+  if (selectedElement) {
+	const nodeId = selectedElement.getAttributeNS("", 'data-nodeid');
+    const posX = selectedElement.getAttributeNS(null, 'x');
+    const posY = selectedElement.getAttributeNS(null, 'y');
+	store.state.nodeLookup[nodeId].forwardEdges.forEach(function renderEdges(connection, index) {
+	  store.dispatch('updateEdge', {posX, posY, nodeId});
+    });
+  }
   selectedElement = null;
 }
 

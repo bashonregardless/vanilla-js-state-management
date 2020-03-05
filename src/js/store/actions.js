@@ -4,5 +4,8 @@ export default {
     },
     clearItem(context, payload) {
         context.commit('clearItem', payload);
-    }
+    },
+	updateEdge(context, payload) {
+	  context.commit('updateEdge', payload);
+	}
 };

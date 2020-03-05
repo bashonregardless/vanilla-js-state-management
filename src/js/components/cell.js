@@ -32,19 +32,20 @@ export default class Status extends Component {
 		const { id , position, connectedNodes } = curr;
 		const { x, y } = position;
 		flat.push(`
-		<g id="${id}">
-		  <foreignObject 
-			id="item-${id}"
-			x="${x}"
-			y="${y}"
-			width="180"
-			height="100"
-			class="draggable"
-			data-drag="draggableNode"
-		  >
-			<div class="cell">${id}</div>
-		  </foreignObject>
-		</g>
+		  <g id="${id}">
+			<foreignObject 
+			  id="item-${id}"
+			  data-nodeid="${id}"
+			  x="${x}"
+			  y="${y}"
+			  width="300"
+			  height="200"
+			  class="draggable"
+			  data-drag="draggableNode"
+			>
+			  <div class="cell">${id}</div>
+			</foreignObject>
+		  </g>
 		`)
 		connectedNodes.forEach(drawNode);
 	  }

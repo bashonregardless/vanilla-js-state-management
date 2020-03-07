@@ -5,7 +5,8 @@ export default class Status extends Component {
   constructor() {
 	super({
 	  store,
-	  element: document.querySelector('.js-status')
+	  element: document.querySelector('.js-status'),
+	  subscribeEvent: 'cell-js'
 	});
   }
 

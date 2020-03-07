@@ -7,11 +7,11 @@ import TreeEdges from './components/treeEdges.js';
 
 // Instantiate components
 const cell = new Cell();
-const draggableNode = new DraggableNode();
+//const draggableNode = new DraggableNode();
 
 // Initial renders
 cell.render();
-draggableNode.render();
+//draggableNode.render();
 
 const chartSvg = document.querySelector('.chart-svg');
 const treeEdgesGroup= document.createElementNS("http://www.w3.org/2000/svg", 'g');
@@ -33,7 +33,6 @@ Object.values(store.state.nodeLookup).forEach(function renderTreeEdges(node) {
 const svgDraggableNode = document.querySelector('svg.genericNodeSvg rect[data-drag="draggableNode"]');
 const chartItemDraggable = document.querySelectorAll('svg.chart-svg foreignObject[data-drag="draggableNode"]');
 
-//const draggableNodes = [svgDraggableNode, chartItemDraggable];
 var selectedElement = false, offset, el;
 chartItemDraggable.forEach(node => {
   node.addEventListener('mousedown', startDrag);
@@ -41,11 +40,6 @@ chartItemDraggable.forEach(node => {
   node.addEventListener('mouseup', endDrag);
   node.addEventListener('mouseleave', endDrag);
 })
-
-svgDraggableNode.addEventListener('mousedown', startDrag);
-svgDraggableNode.addEventListener('mousemove', drag);
-svgDraggableNode.addEventListener('mouseup', endDrag);
-svgDraggableNode.addEventListener('mouseleave', endDrag);
 
 function startDrag(evt) {
   el = evt.target.classList.contains('cell') ? evt.target.parentElement : evt.target;
@@ -62,7 +56,8 @@ function startDrag(evt) {
 
 function getMousePosition(evt) {
   console.log('inside getMousePosition');
-  var CTM = evt.target.getScreenCTM();
+  //var CTM = evt.target.getScreenCTM();
+  var CTM = selectedElement.getScreenCTM();
   return {
 	x: (evt.clientX - CTM.e) / CTM.a,
 	y: (evt.clientY - CTM.f) / CTM.d

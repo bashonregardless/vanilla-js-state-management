@@ -14,7 +14,8 @@ export default class TreeEdgeConnection extends Component {
   constructor(props) {
 	super({
 	  store,
-	  element: props.element
+	  element: props.element,
+	  subscribeEvent: 'reposition'
 	});
 
 	this.node = props.node;
@@ -94,11 +95,6 @@ export default class TreeEdgeConnection extends Component {
 	);
 
 	return `
-	  <marker
-		edgeType='treeEdge'
-		nodeId=${nodeId}
-		connectedNodeId=${connectedNodeId}
-	  />
 	  <path
 		id="connection-${nodeId}-${connectedNodeId}"
 		stroke='#000000'

@@ -15,7 +15,7 @@ export default class TreeEdgeConnection extends Component {
 	super({
 	  store,
 	  element: props.element,
-	  subscribeEvent: 'reposition'
+	  subscribeEvent: 'reposition insertLeaf'
 	});
 
 	this.node = props.node;

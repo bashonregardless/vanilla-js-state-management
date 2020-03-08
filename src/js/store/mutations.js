@@ -1,3 +1,5 @@
+import updateOnInsert from '../utils/updateOnInsert.js';
+
 export default {
   addItem(state, payload) {
 	state.items.push(payload);
@@ -25,5 +27,26 @@ export default {
 		}
 	  }
 	}
-  }
+  },
+  insertLeaf(state, payload) {
+	var newState = {
+	  ...state,
+	  adjL: {
+		...state.adjL,
+		nodes: {
+		  ...state.adjL.nodes,
+		  [payload.parentId]: {
+			...state.adjL.nodes[payload.parentId],
+			connectedNodes: [
+			  ...state.adjL.nodes[payload.parentId].connectedNodes,
+			  payload.newNode
+			]
+		  },
+		  [payload.newNode.id]: payload.newNode
+		}
+	  }
+	}
+
+	returnupdateOnInsert(newState.adjL);
+  },
 };

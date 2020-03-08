@@ -108,4 +108,4 @@ POSITION_GENERATOR.repositionAfterInsert = function repositionAfterInsert (paren
 
 }
 
-module.exports = POSITION_GENERATOR;
+export default POSITION_GENERATOR;

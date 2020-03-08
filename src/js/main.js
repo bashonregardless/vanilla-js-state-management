@@ -31,15 +31,28 @@ Object.values(store.state.nodeLookup).forEach(function renderTreeEdges(node) {
 
 
 const svgDraggableNode = document.querySelector('svg.genericNodeSvg rect[data-drag="draggableNode"]');
-const chartItemDraggable = document.querySelectorAll('svg.chart-svg foreignObject[data-drag="draggableNode"]');
+const foreignObjectDraggable = document.querySelectorAll('svg.chart-svg foreignObject[data-drag="draggableNode"]');
 
 var selectedElement = false, offset, el;
-chartItemDraggable.forEach(node => {
+foreignObjectDraggable.forEach(node => {
   node.addEventListener('mousedown', startDrag);
   node.addEventListener('mousemove', drag);
   node.addEventListener('mouseup', endDrag);
   node.addEventListener('mouseleave', endDrag);
+  node.addEventListener('click', onClickInsertLeaf);
 })
+
+function onClickInsertLeaf(evt) {
+  el = evt.target.classList.contains('cell') ? evt.target.parentElement : evt.target;
+  const nodeId = el.getAttributeNS("", 'data-nodeid');
+  store.dispatch('insertLeaf', { 
+	parentId: nodeId, 
+	['newNode']: {
+	  id: 'newNode',
+	  connectedNodes: []
+	}
+  });
+}
 
 function startDrag(evt) {
   el = evt.target.classList.contains('cell') ? evt.target.parentElement : evt.target;
@@ -82,14 +95,6 @@ function drag(evt) {
 
 function endDrag(evt) {
   console.log('inside end drag');
-  //if (selectedElement) {
-  //  const nodeId = selectedElement.getAttributeNS("", 'data-nodeid');
-  //  const posX = selectedElement.getAttributeNS(null, 'x');
-  //  const posY = selectedElement.getAttributeNS(null, 'y');
-  //  store.state.nodeLookup[nodeId].forwardEdges.forEach(function renderEdges(connection, index) {
-  //    store.dispatch('updateEdge', {posX, posY, nodeId});
-  //  });
-  //}
   selectedElement = null;
 }
 

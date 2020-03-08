@@ -7,5 +7,8 @@ export default {
     },
 	updateEdge(context, payload) {
 	  context.commit('updateEdge', payload);
+	},
+	insertLeaf(context, payload) {
+	  context.commit('insertLeaf', payload);
 	}
 };

@@ -42,6 +42,7 @@ GRAPH_EXPLORER.setup = function setup () {
 	rootId: state.adjL.root,
 	nodeLookup: this.exploredNodes,
 	nodes: this.nodes,
+	adjL: state.adjL,
 	minX: this.minX,
 	maxX: this.maxX,
 	maxY: this.maxY

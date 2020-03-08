@@ -7,7 +7,7 @@ export default class Status extends Component {
 	super({
 	  store,
 	  element: document.querySelector('.js-status'),
-	  subscribeEvent: 'cell-js'
+	  subscribeEvent: 'insertLeaf'
 	});
   }
 

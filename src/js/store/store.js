@@ -117,7 +117,7 @@ export default class Store {
 	self.state = Object.assign(self.state, newState);
 
 	//console.log(self.state);
-	self.publishEvt('reposition');
+	self.publishEvt(mutationKey);
 
 	return true;
   }

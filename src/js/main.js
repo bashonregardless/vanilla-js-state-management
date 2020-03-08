@@ -71,12 +71,6 @@ function drag(evt) {
 	var coord = getMousePosition(evt);
 	selectedElement.setAttributeNS(null, "x", coord.x - offset.x);
 	selectedElement.setAttributeNS(null, "y", coord.y - offset.y);
-  }
-}
-
-function endDrag(evt) {
-  console.log('inside end drag');
-  if (selectedElement) {
 	const nodeId = selectedElement.getAttributeNS("", 'data-nodeid');
     const posX = selectedElement.getAttributeNS(null, 'x');
     const posY = selectedElement.getAttributeNS(null, 'y');
@@ -84,6 +78,18 @@ function endDrag(evt) {
 	  store.dispatch('updateEdge', {posX, posY, nodeId});
     });
   }
+}
+
+function endDrag(evt) {
+  console.log('inside end drag');
+  //if (selectedElement) {
+  //  const nodeId = selectedElement.getAttributeNS("", 'data-nodeid');
+  //  const posX = selectedElement.getAttributeNS(null, 'x');
+  //  const posY = selectedElement.getAttributeNS(null, 'y');
+  //  store.state.nodeLookup[nodeId].forwardEdges.forEach(function renderEdges(connection, index) {
+  //    store.dispatch('updateEdge', {posX, posY, nodeId});
+  //  });
+  //}
   selectedElement = null;
 }
 

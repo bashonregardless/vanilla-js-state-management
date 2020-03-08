@@ -70,7 +70,7 @@ POSITION_GENERATOR.reposition = function reposition (node = {}) {
 	(Object.prototype.hasOwnProperty.call(this.exploredNodes, connectedNode.id)) ?
 	  this.updateExploredNodes(connectedNode.position, connectedNode.id)
 	  :
-	  this.tempPosStorage[connectedNode.id] = newPosition
+	  this.tempPosStorage[connectedNode.id] = connectedNode.position;
 
 	this.minX = (updatedX < this.minX) ? updatedX : this.minX;
 	this.maxX = (updatedX > this.maxX) ? updatedX : this.maxX;

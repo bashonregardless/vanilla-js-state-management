@@ -41,7 +41,7 @@ GRAPH_EXPLORER.setup = function setup () {
   console.log(JSON.stringify({
 	rootId: state.adjL.root,
 	nodeLookup: this.exploredNodes,
-	//nodes: this.nodes,
+	nodes: this.nodes,
 	minX: this.minX,
 	maxX: this.maxX,
 	maxY: this.maxY

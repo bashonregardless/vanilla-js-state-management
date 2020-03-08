@@ -1,5 +1,6 @@
 import Component from '../lib/component.js';
 import store from '../store/index.js';
+import { DIMENSION } from '../utils/constants.js';
 
 export default class Status extends Component {
   constructor() {
@@ -20,47 +21,50 @@ export default class Status extends Component {
 
 	function calSVGWidth () {
 	  const { minX: min, maxX: max } = store.state;
-	  return 200 + Math.abs(min) + max
+	  return DIMENSION.chartXMargin + Math.abs(min) + max
 	}
 
 	function calSVGHeight () {
-	  return 200 + store.state.maxY;
+	  return DIMENSION.chartYMargin + store.state.maxY;
 	}
 
-	function insertNode (node) {
-	  var flat = [];
-	  function drawNode (curr) {
-		const { id , position, connectedNodes } = curr;
+	function insertNode () {
+	  var nodesHTML = '';
+	  function drawNode (currNode) {
+		const { id } = currNode;
+		const { position, connectedNodes } = currNode;
 		const { x, y } = position;
-		flat.push(`
-		  <g id="${id}">
-			<foreignObject 
-			  id="item-${id}"
-			  data-nodeid="${id}"
-			  x="${x}"
-			  y="${y}"
-			  width="300"
-			  height="200"
-			  class="draggable"
-			  data-drag="draggableNode"
-			>
-			  <div class="cell">${id}</div>
-			</foreignObject>
-		  </g>
-		`)
+		var htmlStr = `
+		  <foreignObject 
+			id="item-${id}"
+			data-nodeid="${id}"
+			x="${x}"
+			y="${y}"
+			width="300"
+			height="200"
+			class="draggable"
+			data-drag="draggableNode"
+		  >
+			<div class="cell">${id}</div>
+		  </foreignObject>
+		`
+		nodesHTML += htmlStr;
 		connectedNodes.forEach(drawNode);
 	  }
-	  drawNode(node);
-	  return flat;
+	  drawNode(store.state.nodes);
+	  return nodesHTML;
 	}
 
 	self.element.innerHTML = `
-	<svg viewBox="-${calSVGWidth() / 2 - 300} 0 ${calSVGWidth()} ${calSVGHeight()}"
+	<svg viewBox="-${(calSVGWidth() - 300) / 2} 0 ${calSVGWidth()} ${calSVGHeight()}"
 	  width="${calSVGWidth()}"
 	  height="${calSVGHeight()}"
 	  class="chart-svg"
+	  preserveAspectRatio="xMinYMin meet"
 	>
-	  ${insertNode(store.state.nodes).join('')}
+	  <g id="node-group">
+		${ insertNode() }
+	  </g>
 	</svg>`;
   }
 }

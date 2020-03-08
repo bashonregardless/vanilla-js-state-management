@@ -1,14 +1,3 @@
-export const TABS = [
-  { label: 'Insights', type: 'insights' },
-  { label: 'Initiatives', type: 'initiatives' },
-  { label: 'Performance', type: 'performance' }
-];
-
-/* There are two types of dimensions:
- * Fundamental dimension: These fixed numbers that calculate the dimensions of chart.
- * Derived dimension: These are derived from fundamental dimensions.
- */
-
 export const DIMENSION = {
   nodeWidth: 280,
   chartYMargin: 200,
@@ -24,4 +13,5 @@ export const DIMENSION = {
   // This dimension is sum of backEdgeHorizontalExtension on either side of chart 105 on each side,
   // and ForeignObjectWidth for an icon rendered on right most icon foreignObject.
   chartXMargin: 322,
+  treeEdgeVerticalHeightUnit: 24,
 }

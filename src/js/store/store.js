@@ -53,6 +53,7 @@ export default class Store {
 	});
   }
 
+
   /**
    * A dispatcher for actions that looks in the actions 
    * collection and runs the action if it can find it

@@ -6,11 +6,13 @@ export default {
 
 	return state;
   },
+
   clearItem(state, payload) {
 	state.items.splice(payload.index, 1);
 
 	return state;
   },
+
   updateEdge(state, payload = {}) {
 	console.log(state.nodeLookup);
 	return {
@@ -28,6 +30,7 @@ export default {
 	  }
 	}
   },
+
   insertLeaf(state, payload) {
 	var newState = {
 	  ...state,
@@ -46,7 +49,10 @@ export default {
 		}
 	  }
 	}
-
-	returnupdateOnInsert(newState.adjL);
+	return updateOnInsert(state.adjL);
   },
+
+  reposition(state, payload) {
+	return updateOnInsert(state.adjL);
+  }
 };

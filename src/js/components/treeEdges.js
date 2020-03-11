@@ -107,12 +107,8 @@ export default class TreeEdgeConnection extends Component {
 
   render() {
 	let self = this;
-	console.log('treeEdges render');
 
-	const inHtml = self.element.innerHTML;
-	const patth = this.getPath();
-
-	self.element.innerHTML = patth;
+	self.element.innerHTML = this.getPath();
   }
 }
 

@@ -88,7 +88,7 @@ function drag(evt) {
     const posX = selectedElement.getAttributeNS(null, 'x');
     const posY = selectedElement.getAttributeNS(null, 'y');
 	store.state.nodeLookup[nodeId].forwardEdges.forEach(function renderEdges(connection, index) {
-	  store.dispatch('updateEdge', {posX, posY, nodeId});
+	  store.dispatch('reposition', {posX, posY, nodeId});
     });
   }
 }

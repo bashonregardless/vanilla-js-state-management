@@ -1,41 +1,33 @@
+import Proto from '../utils/helpers/proto.js';
+
 import Component from '../lib/component.js';
+
 import store from '../store/index.js';
 import { DIMENSION } from '../utils/constants.js';
 
-export default class Status extends Component {
-  constructor() {
-	super({
-	  store,
-	  element: document.querySelector('.js-status'),
-	  subscribeEvent: 'insertLeaf'
-	});
-  }
+var Cell = function(props = {}) {
+  var obj = {
+	store,
+	element: document.querySelector('#root'),
+	subscribeEvent: 'insertLeaf',
 
-  /**
-   * React to state changes and render the component's HTML
-   *
-   * @returns {void}
-   */
-  render() {
-	let self = this;
-
-	function calSVGWidth () {
+	calSVGWidth () {
 	  const { minX: min, maxX: max } = store.state;
 	  return DIMENSION.chartXMargin + Math.abs(min) + max
-	}
+	},
 
-	function calSVGHeight () {
+	calSVGHeight () {
 	  return DIMENSION.chartYMargin + store.state.maxY;
-	}
+	},
 
-	function insertNode () {
+	insertNode () {
 	  var nodesHTML = '';
 	  function drawNode (currNode) {
 		const { id } = currNode;
 		const { position, connectedNodes } = currNode;
 		const { x, y } = position;
 		var htmlStr = `
-		  <foreignObject 
+		  <foreignObject
 			id="item-${id}"
 			data-nodeid="${id}"
 			x="${x}"
@@ -53,18 +45,29 @@ export default class Status extends Component {
 	  }
 	  drawNode(store.state.nodes);
 	  return nodesHTML;
-	}
-
-	self.element.innerHTML = `
-	<svg viewBox="-${(calSVGWidth() - 300) / 2} 0 ${calSVGWidth()} ${calSVGHeight()}"
-	  width="${calSVGWidth()}"
-	  height="${calSVGHeight()}"
-	  class="chart-svg"
-	  preserveAspectRatio="xMinYMin meet"
-	>
-	  <g id="node-group">
-		${ insertNode() }
-	  </g>
-	</svg>`;
+	},
+	render() {
+	  /**
+	   * React to state changes and render the component's HTML
+	   *
+	   * @returns {void}
+	   */
+	  this.element.innerHTML = `
+		  <svg viewBox="-${(this.calSVGWidth() - 300) / 2} 0 ${this.calSVGWidth()} ${this.calSVGHeight()}"
+			width="${this.calSVGWidth()}"
+			height="${this.calSVGHeight()}"
+			class="chart-svg"
+			preserveAspectRatio="xMinYMin meet"
+		  >
+			<g id="node-group">
+			  ${ this.insertNode() }
+			</g>
+		  </svg>`;
+	},
   }
+  return Proto.create(
+	Component.init.call(obj)
+  )
 }
+
+export default Cell;

@@ -6,9 +6,10 @@ import DraggableNode from './components/genericDraggableNode.js';
 import TreeEdges from './components/treeEdges.js';
 
 // Instantiate components
-const cell = new Cell();
+const cell = Cell();
 //const draggableNode = new DraggableNode();
 
+console.log('take a break');
 // Initial renders
 cell.render();
 //draggableNode.render();
@@ -24,7 +25,9 @@ Object.values(store.state.nodeLookup).forEach(function renderTreeEdges(node) {
 	const pathEl= document.createElementNS("http://www.w3.org/2000/svg", 'g');
 	treeEdgesGroup.appendChild(pathEl);
 	pathEl.setAttribute('class', `treeEdge-${node.id}-${connection.id}`);
-	const treeEdges = new TreeEdges({ element: pathEl, node, connection, index, treeEdgesCount });
+	const treeEdges = Object.create(
+	  TreeEdges({ element: pathEl, node, connection, index, treeEdgesCount })
+	);
 	treeEdges.render();
   });
 });
@@ -85,11 +88,11 @@ function drag(evt) {
 	selectedElement.setAttributeNS(null, "x", coord.x - offset.x);
 	selectedElement.setAttributeNS(null, "y", coord.y - offset.y);
 	const nodeId = selectedElement.getAttributeNS("", 'data-nodeid');
-    const posX = selectedElement.getAttributeNS(null, 'x');
-    const posY = selectedElement.getAttributeNS(null, 'y');
+	const posX = selectedElement.getAttributeNS(null, 'x');
+	const posY = selectedElement.getAttributeNS(null, 'y');
 	store.state.nodeLookup[nodeId].forwardEdges.forEach(function renderEdges(connection, index) {
 	  store.dispatch('reposition', {posX, posY, nodeId});
-    });
+	});
   }
 }
 

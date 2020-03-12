@@ -4,78 +4,75 @@
  */
 
 //import Marker from '../marker';
+import Proto from '../utils/helpers/proto.js';
 
 import Component from '../lib/component.js';
 import store from '../store/index.js';
 import { DIMENSION } from '../utils/constants.js';
 import { deriveEdgeDimension } from '../utils/deriveDimensions';
 
-export default class TreeEdgeConnection extends Component {
-  constructor(props) {
-	super({
-	  store,
-	  element: props.element,
-	  subscribeEvent: 'reposition insertLeaf'
-	});
+var TreeEdgeConnection = function (props) {
+  var obj = {
+	store,
+	element: props.element,
+	subscribeEvent: 'reposition insertLeaf',
+	node: props.node,
+	connection: props.connection,
+	edgeNumber: props.index,
+	treeEdgeCount: props.treeEdgesCount,
 
-	this.node = props.node;
-	this.connection = props.connection;
-	this.edgeNumber = props.index;
-	this.treeEdgeCount = props.treeEdgesCount;
-  }
+	getPathShape (
+	  nodeId,
+	  connectedNodeId,
+	) {
+	  const {
+		edgeNumber
+	  } = this;
 
-  getPathShape (
-	nodeId,
-	connectedNodeId,
-  ) {
-	const {
-	  edgeNumber
-	} = this;
-
-	const {
-	  treeEdgeCount,
-	} = this;
-
-	// Get DOM nodes reference
-	const nodeForeignObject = document.querySelector(`#item-${nodeId}`),
-	  connectedNodeForeignObject = document.querySelector(`#item-${connectedNodeId}`),
-	  nodeContainerDiv = document.querySelector(`#item-${nodeId} > div`);
-
-	// Get svg node attributes
-	const {
-	  x: nodeX,
-	  y: nodeY,
-	} = nodeForeignObject.getBBox(),
-	  {
-		x: connectedNodeX,
-		y: connectedNodeY,
-	  } = connectedNodeForeignObject.getBBox(),
-	  // Get node client attributes
-	  { clientHeight : nodeDivClientHeight } = nodeContainerDiv;
-
-	let [
-	  nodeXPathM,
-	  nodeDivBottomPos,
-	  reqVerticalHeight,
-	  pathH,
-	  incidentNodeV
-	] = deriveEdgeDimension(
-	  {
+	  const {
 		treeEdgeCount,
-		edgeNumber,
-	  },
-	  {
-		nodeX,
-		nodeY,
-		nodeDivClientHeight,
-	  },
-	  {
-		connectedNodeX,
-		connectedNodeY
-	  }
-	);
+	  } = this;
 
-	return `
+	  // Get DOM nodes reference
+	  const nodeForeignObject = document.querySelector(`#item-${nodeId}`),
+		connectedNodeForeignObject = document.querySelector(`#item-${connectedNodeId}`),
+		nodeContainerDiv = document.querySelector(`#item-${nodeId} > div`);
+
+	  // Get svg node attributes
+	  const {
+		x: nodeX,
+		y: nodeY,
+	  } = nodeForeignObject.getBBox(),
+		{
+		  x: connectedNodeX,
+		  y: connectedNodeY,
+		} = connectedNodeForeignObject.getBBox(),
+		// Get node client attributes
+		{ clientHeight : nodeDivClientHeight } = nodeContainerDiv;
+
+	  let [
+		nodeXPathM,
+		nodeDivBottomPos,
+		reqVerticalHeight,
+		pathH,
+		incidentNodeV
+	  ] = deriveEdgeDimension(
+		{
+		  treeEdgeCount,
+		  edgeNumber,
+		},
+		{
+		  nodeX,
+		  nodeY,
+		  nodeDivClientHeight,
+		},
+		{
+		  connectedNodeX,
+		  connectedNodeY
+		}
+	  );
+
+	  return `
 	  M ${nodeXPathM},${nodeDivBottomPos}
 	  v ${reqVerticalHeight}
 	  m 0,0
@@ -83,18 +80,18 @@ export default class TreeEdgeConnection extends Component {
 	  m 0,0
 	  V ${incidentNodeV}
 	`;
-  }
+	},
 
-  getPath() {
-	const { id: nodeId } = this.node,
-	  { id: connectedNodeId } = this.connection;
+	getPath() {
+	  const { id: nodeId } = this.node,
+		{ id: connectedNodeId } = this.connection;
 
-	const pathShape = this.getPathShape(
-	  nodeId,
-	  connectedNodeId,
-	);
+	  const pathShape = this.getPathShape(
+		nodeId,
+		connectedNodeId,
+	  );
 
-	return `
+	  return `
 	  <path
 		id="connection-${nodeId}-${connectedNodeId}"
 		stroke='#000000'
@@ -103,12 +100,18 @@ export default class TreeEdgeConnection extends Component {
 		d="${pathShape}"
 	  />
 	`
+	},
+
+	render() {
+	  let self = this;
+
+	  self.element.innerHTML = this.getPath();
+	}
   }
 
-  render() {
-	let self = this;
+  return Proto.create(
+	Component.init.call(obj));
+};
 
-	self.element.innerHTML = this.getPath();
-  }
-}
+export default TreeEdgeConnection;
 

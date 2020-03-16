@@ -42,7 +42,7 @@ export default class Store {
 
 		// Give the user a little telling off if they set a value directly
 		if(self.status !== 'mutation') {
-		  console.warn(`You should use a mutation to set ${key}`);
+		  //console.warn(`You should use a mutation to set ${key}`);
 		}
 
 		// Reset the status ready for the next operation

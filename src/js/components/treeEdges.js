@@ -13,13 +13,37 @@ import { deriveEdgeDimension } from '../utils/deriveDimensions';
 
 var TreeEdgeConnection = function (props) {
   var obj = {
-	store,
-	element: props.element,
-	subscribeEvent: 'reposition insertLeaf',
+	props: {
+	  store,
+	  element: props.element,
+	  subscribeEvent: 'updateEdge',
+	},
+
 	node: props.node,
 	connection: props.connection,
 	edgeNumber: props.index,
 	treeEdgeCount: props.treeEdgesCount,
+
+
+	init() {
+	  const chartSvg = document.querySelector('.chart-svg');
+	  const treeEdgesGroup= document.createElementNS("http://www.w3.org/2000/svg", 'g');
+	  chartSvg.appendChild(treeEdgesGroup);
+	  treeEdgesGroup.setAttribute('class', 'treeEdge-connections');
+
+	  Object.values(store.state.nodeLookup).forEach(function renderTreeEdges(node) {
+		const treeEdgesCount = node.forwardEdges.length;
+		node.forwardEdges.forEach(function renderEdges(connection, index) {
+		  const pathEl= document.createElementNS("http://www.w3.org/2000/svg", 'g');
+		  treeEdgesGroup.appendChild(pathEl);
+		  pathEl.setAttribute('class', `treeEdge-${node.id}-${connection.id}`);
+		  const treeEdges = Object.create(
+			TreeEdges({ element: pathEl, node, connection, index, treeEdgesCount })
+		  );
+		  treeEdges.render();
+		});
+	  });
+	},
 
 	getPathShape (
 	  nodeId,
@@ -105,12 +129,13 @@ var TreeEdgeConnection = function (props) {
 	render() {
 	  let self = this;
 
+	  console.log('Tree Edge rendered');
 	  self.element.innerHTML = this.getPath();
 	}
   }
 
   return Proto.create(
-	Component.init.call(obj));
+	Component.init.call(obj, obj.props));
 };
 
 export default TreeEdgeConnection;

@@ -1,11 +1,3 @@
-//export default {
-//  items: [
-//	'I made this',
-//	'Another thing'
-//  ]
-//};
-
-
 //module.exports = {
 //  adjL: {
 //	root: 'A',
@@ -686,6 +678,7 @@ module.exports = {
 		connectedNodes: [
 		  { id: 'B', icon: '' },
 		  { id: 'C', icon: '' }
+		  { id: 'Z', icon: '' }
 		]
 	  },
 	  B: {
@@ -826,6 +819,13 @@ module.exports = {
 		type: 'filter',
 		displayName: 'Filter',
 		text: 'Call from Care Coordinator',
+		connectedNodes: []
+	  },
+	  Z: {
+		id: 'Z',
+		type: 'trigger',
+		displayName: 'Trigger Event',
+		text: 'Patient with no visit in last 12 months & no visit scheduled in next 2 months',
 		connectedNodes: []
 	  },
 	}

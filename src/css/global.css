@@ -1,18 +1,8 @@
-/**
- * Define variables
- */
 :root {
-  --border: #888888;
-  --decor: #777777;
-  --text: #141414;
-  --text-secondary: #555555;
-  --danger: #d62c1a;
-  --danger--dark: #a82315;
+  display: flex;
+  justify-content: center;
 }
 
-/** 
- * Core styles 
- */
 html {
   height: 100%;
   font-size: 16px;
@@ -48,10 +38,6 @@ h1, h2 {
   }
 }
 
-/**
- * Intro 
- */
-
 .node-card {
   width: 300px;
   height: 200px;
@@ -60,8 +46,9 @@ h1, h2 {
 
 .cell {
   width: 280px;
-  height: 160;
+  height: 20px;
   background-color: grey;
+  text-align: center;
 }
 
 .genericNodeSvg {

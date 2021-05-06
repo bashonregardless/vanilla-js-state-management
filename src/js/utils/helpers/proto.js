@@ -14,10 +14,3 @@ export default {
   }
 };
 
-//var Pasher = Proto.create({ // "subclass" Proto
-//  init: function(opt) {
-//	if ("name" in opt) this._name = opt.name;
-//  },
-//  _name: "",
-//  get name() { return this._name; }
-//});

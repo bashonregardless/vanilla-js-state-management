@@ -677,7 +677,7 @@ module.exports = {
 		text: 'Patient with no visit in last 12 months & no visit scheduled in next 2 months',
 		connectedNodes: [
 		  { id: 'B', icon: '' },
-		  { id: 'C', icon: '' }
+		  { id: 'C', icon: '' },
 		  { id: 'Z', icon: '' }
 		]
 	  },

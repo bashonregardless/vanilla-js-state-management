@@ -1,7 +1,5 @@
 import Proto from '../utils/helpers/proto.js';
-
 import Component from '../lib/component.js';
-
 import store from '../store/index.js';
 import { DIMENSION } from '../utils/constants.js';
 

@@ -27,10 +27,6 @@ export class ChartConnection extends Component {
     }
   }
 
-  // getYForwardEdgePathM(depth, outdegree, edgeNumber) {
-  //   return (depth * 240) - 60
-  // }
-
   getPathv(totalEdgeCount, edgeNumber) {
     if (totalEdgeCount & 1) {
       const dist = Math.abs(Math.floor(totalEdgeCount / 2) - edgeNumber);
@@ -97,54 +93,10 @@ export class ChartConnection extends Component {
             H ${connectionSvgBBoxX + 140}
             m 0,0
             V ${connectionSvgBBoxY}
-            `}
-          />
+		`}
+	  />
     )
   }
-  // c 0,4 4,0 0,4
-    //  getXBackEdgePathM(connectedNode, parent, xCell) {
-    //    if (this.props.flowData.nodes[parent].xCell > xCell) {
-    //      if (xCell < 0)
-    //        return (this.calSVGWidth() / 2) - (Math.abs(xCell) * 300) + (300 * (1 / 4)) - (Math.abs(xCell) * 60)
-    //    }
-    //    else {
-    //      if (xCell > 0)
-    //        return (this.calSVGWidth() / 2) + (Math.abs(xCell) * 300) + (Math.abs(xCell) * 60) + (300 * (3 / 4));
-    //    }
-    //  }
-    //
-    //  getYBackEdgePathM(connectedNode, depth) {
-    //    return (depth * 240) - 60 - 180
-    //  }
-    //
-    //  getBackEdgePathv(connectedNode) {
-    //    const { depth } = this.props.flowData.nodes[connectedNode];
-    //    return (depth * 240) - 90;
-    //  }
-    //
-    //  getBackEdgePathh(connectedNode, xCell) {
-    //    const { xCell: connectedNodeXCell } = this.props.flowData.nodes[connectedNode];
-    //    if (connectedNodeXCell === 0) {
-    //      return (300 * (3 / 4)) + ((Math.abs(xCell) - Math.abs(connectedNodeXCell)) * 60);
-    //    }
-    //  }
-    //
-    //  getBackEdgePath({ depth, xCell, outdegree, forwardEdges, backEdges, parent }) {
-    //    return backEdges.map((connectedNode) => {
-    //      const { id = '', icon = '', label = '' } = connectedNode;
-    //      return (
-    //        <path
-    //          stroke="black"
-    //          d={`
-    //          M ${this.getXBackEdgePathM(id, parent, xCell)},${this.getYBackEdgePathM(id, depth)}
-    //          v -${this.getBackEdgePathv(id)}
-    //          m 0,0
-    //          h ${this.getBackEdgePathh(id, xCell)}
-    //          `}
-    //        />
-    //      )
-    //    });
-    //  }
 
   insertConnection = (node) => {
     const {
@@ -157,7 +109,7 @@ export class ChartConnection extends Component {
     const totalEdgeCount = forwardEdges.length + backEdges.length;
 
     return forwardEdges.map(function drawConnection(connection, index) {
-      const { id, icon = '', label = '' } = connection;
+      const { id } = connection;
 
       return (
         this.getForwardEdgePath(

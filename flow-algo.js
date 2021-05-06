@@ -18,7 +18,7 @@
  * Back Edge: Node -> Ancestor
  */
 
-const state = require('./src/js/store/state.js');
+const state = require('./src/js/store/data.js');
 const POSITION_GENERATOR = require('./position-generator');
 
 var GRAPH_EXPLORER = Object.create(
@@ -74,9 +74,7 @@ GRAPH_EXPLORER.updateProcessingQueue = function updateProcessingQueue(
 	idx
   ) {
 	const {
-	  id: currNodeId,
-	  icon = '',
-	  label = ''
+	  id: currNodeId
 	} = currNode;
 
 	/* if node hasn't been processed yet, push it to processing queue */
@@ -93,17 +91,13 @@ GRAPH_EXPLORER.updateProcessingQueue = function updateProcessingQueue(
 
 	  // add discovered forward edge
 	  processingNode.forwardEdges.push({
-		id: currNodeId,
-		icon,
-		label
+		id: currNodeId
 	  });
 	}
 	// else a back edge is discovered
 	else {
 	  processingNode.backEdges.push({
-		id: currNodeId,
-		icon,
-		label
+		id: currNodeId
 	  });
 	  this.backEdgeNodes.add(processingNode.id);
 	}

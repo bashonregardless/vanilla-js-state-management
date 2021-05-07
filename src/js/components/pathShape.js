@@ -71,16 +71,10 @@ export default getPath() {
   );
 
   return `
-	  <marker
-		edgeType='treeEdge'
-		nodeId=${nodeId}
-		connectedNodeId=${connectedNodeId}
-	  />
 	  <path
 		id="connection-${nodeId}-${connectedNodeId}"
 		stroke='#000000'
 		strokeWidth='2'
-		marker-end="url(#marker-treeEdge-${nodeId}-${connectedNodeId})"
 		d="${pathShape}"
 	  />
 	`

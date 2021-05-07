@@ -1,4 +1,3 @@
-
 const path = require('path');
 const Visualizer = require('webpack-visualizer-plugin');
 
@@ -24,9 +23,7 @@ module.exports = {
   },
   devtool: 'source-map',
   plugins: [
-
     new Visualizer(),
-
   ],
   mode: 'production'
 };

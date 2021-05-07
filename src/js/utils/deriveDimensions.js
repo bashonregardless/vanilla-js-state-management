@@ -53,7 +53,7 @@ export function deriveEdgeDimension(
 	- getVh(treeEdgeCount, edgeNumber);
 
   const pathH = connectedNodeX + (DIMENSION.nodeWidth / 2),
-	incidentNodeV = connectedNodeY - DIMENSION.markerAdjustment;
+	incidentNodeV = connectedNodeY;
 
   return [
 	nodeXPathM,
